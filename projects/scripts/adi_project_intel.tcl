@@ -22,6 +22,12 @@ proc adi_project {project_name {parameter_list {}}} {
   global IGNORE_VERSION_CHECK
   global QUARTUS_PRO_ISUSED
 
+  if {![info exists ::env(ADI_PROJECT_DIR)]} {
+    set actual_project_name $project_name
+  } else {
+    set actual_project_name $::env(ADI_PROJECT_DIR)${project_name}
+  }
+
   # check $ALT_NIOS_MMU_ENABLED environment variables
 
   set mmu_enabled 1
@@ -37,40 +43,40 @@ proc adi_project {project_name {parameter_list {}}} {
     set quartus_pro_isused $QUARTUS_PRO_ISUSED
   }
 
-  if [regexp "_a10gx$" $project_name] {
+  if [regexp "_a10gx" $project_name] {
     set family "Arria 10"
     set device 10AX115S2F45I1SG
   }
 
-  if [regexp "_a10soc$" $project_name] {
+  if [regexp "_a10soc" $project_name] {
     set family "Arria 10"
     set device 10AS066N3F40E2SG
   }
 
-  if [regexp "_s10soc$" $project_name] {
+  if [regexp "_s10soc" $project_name] {
     set family "Stratix 10"
     set device 1SX280HU2F50E1VGAS
   }
 
-  if [regexp "_c5soc$" $project_name] {
+  if [regexp "_c5soc" $project_name] {
     set family "Cyclone V"
     set device 5CSXFC6D6F31C8ES
     set system_qip_file system_bd/synthesis/system_bd.qip
   }
 
-  if [regexp "_de10nano$" $project_name] {
+  if [regexp "_de10nano" $project_name] {
     set family "Cyclone V"
     set device 5CSEBA6U23I7DK
     set system_qip_file system_bd/synthesis/system_bd.qip
   }
 
-  if [regexp "_a5soc$" $project_name] {
+  if [regexp "_a5soc" $project_name] {
     set family "Arria V"
     set device 5ASTFD5K3F40I3ES
     set system_qip_file system_bd/synthesis/system_bd.qip
   }
 
-  if [regexp "_a5gt$" $project_name] {
+  if [regexp "_a5gt" $project_name] {
     set family "Arria V"
     set device 5AGTFD7K3F40I3
     set system_qip_file system_bd/synthesis/system_bd.qip
@@ -101,7 +107,7 @@ proc adi_project {project_name {parameter_list {}}} {
 
   # project
 
-  project_new $project_name -overwrite
+  project_new $actual_project_name -overwrite
 
   # library paths
   if {[info exists ::env(ADI_GHDL_DIR)]} {
@@ -126,7 +132,7 @@ proc adi_project {project_name {parameter_list {}}} {
   }
 
   set QFILE [open "system_qsys_script.tcl" "w"]
-  puts $QFILE "set project_name $project_name"
+  puts $QFILE "set project_name $actual_project_name"
   puts $QFILE "set mmu_enabled $mmu_enabled"
   puts $QFILE "set ad_hdl_dir $ad_hdl_dir"
   if {[info exists ::env(ADI_GHDL_DIR)]} {
@@ -155,11 +161,11 @@ proc adi_project {project_name {parameter_list {}}} {
   if {$quartus_pro_isused == 1} {
 
     exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-script \
-      --quartus_project=$project_name --script=system_qsys_script.tcl
+      --quartus_project=$actual_project_name --script=system_qsys_script.tcl
 
     exec -ignorestderr $quartus(quartus_rootpath)/sopc_builder/bin/qsys-generate \
       system_bd.qsys --synthesis=VERILOG --family=$family --part=$device \
-      --quartus-project=$project_name
+      --quartus-project=$actual_project_name
 
   } else {
 

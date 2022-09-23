@@ -1,9 +1,10 @@
-
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project_create fmcomms8_adrv9009zu11eg 0 [list \
+set project_name [get_env_param ADI_PROJECT_NAME fmcomms8_adrv9009zu11eg]
+
+adi_project_create $project_name 0 [list \
   JESD_RX_M 16 \
   JESD_RX_L 8 \
   JESD_RX_S 1 \
@@ -16,7 +17,7 @@ adi_project_create fmcomms8_adrv9009zu11eg 0 [list \
 ] "xczu11eg-ffvf1517-2-i"
 
 
-adi_project_files  fmcomms8_adrv9009zu11eg [list \
+adi_project_files $project_name [list \
   "system_top.v" \
   "fmcomms8_constr.xdc"\
   "../common/adrv9009zu11eg_spi.v" \
@@ -25,4 +26,4 @@ adi_project_files  fmcomms8_adrv9009zu11eg [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
  ]
 
-adi_project_run fmcomms8_adrv9009zu11eg
+adi_project_run $project_name

@@ -1,6 +1,7 @@
-
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
+
+set project_name [get_env_param ADI_PROJECT_NAME adrv9009_s10soc]
 
 adi_project adrv9009_s10soc
 
