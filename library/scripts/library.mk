@@ -29,6 +29,16 @@ CLEAN_TARGET += *.sim
 CLEAN_TARGET += .Xil
 CLEAN_TARGET += .timestamp_intel
 CLEAN_TARGET += *.hbs
+CLEAN_TARGET += tb/*.log
+CLEAN_TARGET += tb/*.xml
+CLEAN_TARGET += tb/*.jou
+CLEAN_TARGET += tb/*.dir
+CLEAN_TARGET += tb/*.pb
+CLEAN_TARGET += tb/*.vcd
+CLEAN_TARGET += tb/vsim.wlf
+CLEAN_TARGET += tb/work
+CLEAN_TARGET += tb/vcd
+CLEAN_TARGET += tb/run
 
 GENERIC_DEPS += $(HDL_LIBRARY_PATH)../scripts/adi_env.tcl
 
