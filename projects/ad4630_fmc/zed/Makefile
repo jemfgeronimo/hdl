@@ -1,10 +1,10 @@
 ####################################################################################
-## Copyright (c) 2018 - 2021 Analog Devices, Inc.
+## Copyright (c) 2019 - 2022 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad463x_fmc_zed
+PROJECT_NAME := ad4630_fmc_zed
 
 M_DEPS += system_constr_8sdi.xdc
 M_DEPS += system_constr_4sdi.xdc
