@@ -435,7 +435,6 @@ module axi_ltc235x_cmos #(
   generate
 
     for (i=0; i < 8; i=i+1) begin: format
-      assign adc_crc_err[i] = 1'b0;// CRC feature - do be done
       if (PACKET_FORMAT == 0) begin
         assign adc_data_s[i] = {{12{adc_data_store[i][19]}}, adc_data_store[i]};
         assign adc_ch_id_s[i] = 3'd0;
