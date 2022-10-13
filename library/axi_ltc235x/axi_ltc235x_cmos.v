@@ -38,7 +38,7 @@
 module axi_ltc235x_cmos #(
 	parameter NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
 	parameter DATA_WIDTH = 18,	// 18 or 16
-  parameter ACTIVE_LANE = 8'b11111111,
+  parameter ACTIVE_LANE = 8'b1111_1111,
 	parameter SOFTSPAN
 ) (
 
@@ -98,6 +98,7 @@ module axi_ltc235x_cmos #(
 
   reg                 scki_i;
   reg                 scki_d;
+  reg                 scko_d;
 
   reg         [BW:0]  adc_data_store[7:0];
   reg         [BW:0]  adc_data_init[7:0];
@@ -149,6 +150,11 @@ module axi_ltc235x_cmos #(
   wire                scki_cnt_rst;
 
   // instantiations
+
+  
+  always @(posedge clk) begin
+    scko_d <= scko;
+  end
 
   always @(posedge clk) begin
     if (rst == 1'b1) begin
