@@ -126,14 +126,14 @@ module axi_ltc235x_cmos #(
   reg         [ 4:0]  adc_ch6_shift_d;
   reg         [ 4:0]  adc_ch7_shift_d;
 
-  reg         [ 3:0]  lane_0_data = 'd0;
-  reg         [ 3:0]  lane_1_data = 'd0;
-  reg         [ 3:0]  lane_2_data = 'd0;
-  reg         [ 3:0]  lane_3_data = 'd0;
-  reg         [ 3:0]  lane_4_data = 'd0;
-  reg         [ 3:0]  lane_5_data = 'd0;
-  reg         [ 3:0]  lane_6_data = 'd0;
-  reg         [ 3:0]  lane_7_data = 'd0;
+  reg         [ 2:0]  lane_0_data = 'd0;
+  reg         [ 2:0]  lane_1_data = 'd0;
+  reg         [ 2:0]  lane_2_data = 'd0;
+  reg         [ 2:0]  lane_3_data = 'd0;
+  reg         [ 2:0]  lane_4_data = 'd0;
+  reg         [ 2:0]  lane_5_data = 'd0;
+  reg         [ 2:0]  lane_6_data = 'd0;
+  reg         [ 2:0]  lane_7_data = 'd0;
   reg         [ 7:0]  ch_data_lock = 'hff;
 
   reg                 busy_m1;
@@ -238,7 +238,7 @@ module axi_ltc235x_cmos #(
       lane_5_data <= 4'd5;
       lane_6_data <= 4'd6;
       lane_7_data <= 4'd7;
-      ch_data_lock <= 9'd0;
+      ch_data_lock <= 8'd0;
     end else if (aquire_data == 1'b1 && (scki_cnt_rst & (~scki_d & scki_i))) begin
       lane_0_data <= lane_0_data[3] == 1'b1 ? 4'd0 : lane_0_data + 1;
       lane_1_data <= lane_1_data[3] == 1'b1 ? 4'd0 : lane_1_data + 1;
