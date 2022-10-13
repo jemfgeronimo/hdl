@@ -240,22 +240,22 @@ module axi_ltc235x_cmos #(
       lane_7_data <= 4'd7;
       ch_data_lock <= 8'd0;
     end else if (aquire_data == 1'b1 && (scki_cnt_rst & (~scki_d & scki_i))) begin
-      lane_0_data <= lane_0_data[3] == 1'b1 ? 4'd0 : lane_0_data + 1;
-      lane_1_data <= lane_1_data[3] == 1'b1 ? 4'd0 : lane_1_data + 1;
-      lane_2_data <= lane_2_data[3] == 1'b1 ? 4'd0 : lane_2_data + 1;
-      lane_3_data <= lane_3_data[3] == 1'b1 ? 4'd0 : lane_3_data + 1;
-      lane_4_data <= lane_4_data[3] == 1'b1 ? 4'd0 : lane_4_data + 1;
-      lane_5_data <= lane_5_data[3] == 1'b1 ? 4'd0 : lane_5_data + 1;
-      lane_6_data <= lane_6_data[3] == 1'b1 ? 4'd0 : lane_6_data + 1;
-      lane_7_data <= lane_7_data[3] == 1'b1 ? 4'd0 : lane_7_data + 1;
-      ch_data_lock[lane_0_data[3:0]] <= ACTIVE_LANE[0] ? 1'b1 : ch_data_lock[lane_0_data[2:0]];
-      ch_data_lock[lane_1_data[3:0]] <= ACTIVE_LANE[1] ? 1'b1 : ch_data_lock[lane_1_data[2:0]];
-      ch_data_lock[lane_2_data[3:0]] <= ACTIVE_LANE[2] ? 1'b1 : ch_data_lock[lane_2_data[2:0]];
-      ch_data_lock[lane_3_data[3:0]] <= ACTIVE_LANE[3] ? 1'b1 : ch_data_lock[lane_3_data[2:0]];
-      ch_data_lock[lane_4_data[3:0]] <= ACTIVE_LANE[4] ? 1'b1 : ch_data_lock[lane_4_data[2:0]];
-      ch_data_lock[lane_5_data[3:0]] <= ACTIVE_LANE[5] ? 1'b1 : ch_data_lock[lane_5_data[2:0]];
-      ch_data_lock[lane_6_data[3:0]] <= ACTIVE_LANE[6] ? 1'b1 : ch_data_lock[lane_6_data[2:0]];
-      ch_data_lock[lane_7_data[3:0]] <= ACTIVE_LANE[7] ? 1'b1 : ch_data_lock[lane_7_data[2:0]];
+      lane_0_data <= lane_0_data + 1;
+      lane_1_data <= lane_1_data + 1;
+      lane_2_data <= lane_2_data + 1;
+      lane_3_data <= lane_3_data + 1;
+      lane_4_data <= lane_4_data + 1;
+      lane_5_data <= lane_5_data + 1;
+      lane_6_data <= lane_6_data + 1;
+      lane_7_data <= lane_7_data + 1;
+      ch_data_lock[lane_0_data] <= ACTIVE_LANE[0] ? 1'b1 : ch_data_lock[lane_0_data];
+      ch_data_lock[lane_1_data] <= ACTIVE_LANE[1] ? 1'b1 : ch_data_lock[lane_1_data];
+      ch_data_lock[lane_2_data] <= ACTIVE_LANE[2] ? 1'b1 : ch_data_lock[lane_2_data];
+      ch_data_lock[lane_3_data] <= ACTIVE_LANE[3] ? 1'b1 : ch_data_lock[lane_3_data];
+      ch_data_lock[lane_4_data] <= ACTIVE_LANE[4] ? 1'b1 : ch_data_lock[lane_4_data];
+      ch_data_lock[lane_5_data] <= ACTIVE_LANE[5] ? 1'b1 : ch_data_lock[lane_5_data];
+      ch_data_lock[lane_6_data] <= ACTIVE_LANE[6] ? 1'b1 : ch_data_lock[lane_6_data];
+      ch_data_lock[lane_7_data] <= ACTIVE_LANE[7] ? 1'b1 : ch_data_lock[lane_7_data];
     end else begin
       lane_0_data <= lane_0_data;
       lane_1_data <= lane_1_data;
