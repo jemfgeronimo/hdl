@@ -230,14 +230,14 @@ module axi_ltc235x_cmos #(
 
   always @(posedge clk) begin
     if (start_transfer_s) begin
-      lane_0_data <= 4'd0;
-      lane_1_data <= 4'd1;
-      lane_2_data <= 4'd2;
-      lane_3_data <= 4'd3;
-      lane_4_data <= 4'd4;
-      lane_5_data <= 4'd5;
-      lane_6_data <= 4'd6;
-      lane_7_data <= 4'd7;
+      lane_0_data <= 3'd0;
+      lane_1_data <= 3'd1;
+      lane_2_data <= 3'd2;
+      lane_3_data <= 3'd3;
+      lane_4_data <= 3'd4;
+      lane_5_data <= 3'd5;
+      lane_6_data <= 3'd6;
+      lane_7_data <= 3'd7;
       ch_data_lock <= 8'd0;
     end else if (aquire_data == 1'b1 && (scki_cnt_rst & (~scki_d & scki_i))) begin
       lane_0_data <= lane_0_data + 1;
