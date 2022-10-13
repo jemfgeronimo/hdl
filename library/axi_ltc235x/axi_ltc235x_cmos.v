@@ -98,7 +98,6 @@ module axi_ltc235x_cmos #(
 
   reg                 scki_i;
   reg                 scki_d;
-  reg                 scko_d;
 
   reg         [BW:0]  adc_data_store[7:0];
   reg         [BW:0]  adc_data_init[7:0];
@@ -149,14 +148,11 @@ module axi_ltc235x_cmos #(
   wire                aquire_data;
   wire                scki_cnt_rst;
 
+  wire                scko_i;
+
   // instantiations
 
-  
-  always @(posedge clk) begin
-    scko_d <= scko;
-  end
-
-  always @(posedge clk) begin
+    always @(posedge clk) begin
     if (rst == 1'b1) begin
       busy_m1 <= 1'b0;
       busy_m2 <= 1'b0;
@@ -195,6 +191,7 @@ module axi_ltc235x_cmos #(
 
   assign scki_cnt_rst = (scki_counter == DW) ? 1'b1 : 1'b0;
   assign scki = scki_i | ~aquire_data;
+  assign scko_i = scko & ~busy_m1;
 
   /*
   The device sends each channel data on one of the 8 lines.
@@ -279,7 +276,7 @@ module axi_ltc235x_cmos #(
                          (ch_data_lock[7] | ~adc_enable[7]));
 
   // capture data
-  always @(scko) begin
+  always @(scko_i) begin
     adc_lane_0 <= {adc_lane_0[BW-1:0], db_i[0]};
     adc_lane_1 <= {adc_lane_1[BW-1:0], db_i[1]};
     adc_lane_2 <= {adc_lane_2[BW-1:0], db_i[2]};
