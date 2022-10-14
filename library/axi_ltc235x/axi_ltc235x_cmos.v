@@ -107,23 +107,23 @@ module axi_ltc235x_cmos #(
   reg         [ 7:0]  ch_capture;
   reg         [ 7:0]  ch_captured;
 
-  reg         [ 4:0]  adc_ch0_shift;
-  reg         [ 4:0]  adc_ch1_shift;
-  reg         [ 4:0]  adc_ch2_shift;
-  reg         [ 4:0]  adc_ch3_shift;
-  reg         [ 4:0]  adc_ch4_shift;
-  reg         [ 4:0]  adc_ch5_shift;
-  reg         [ 4:0]  adc_ch6_shift;
-  reg         [ 4:0]  adc_ch7_shift;
+  reg         [ 3:0]  adc_ch0_shift;
+  reg         [ 3:0]  adc_ch1_shift;
+  reg         [ 3:0]  adc_ch2_shift;
+  reg         [ 3:0]  adc_ch3_shift;
+  reg         [ 3:0]  adc_ch4_shift;
+  reg         [ 3:0]  adc_ch5_shift;
+  reg         [ 3:0]  adc_ch6_shift;
+  reg         [ 3:0]  adc_ch7_shift;
 
-  reg         [ 4:0]  adc_ch0_shift_d;
-  reg         [ 4:0]  adc_ch1_shift_d;
-  reg         [ 4:0]  adc_ch2_shift_d;
-  reg         [ 4:0]  adc_ch3_shift_d;
-  reg         [ 4:0]  adc_ch4_shift_d;
-  reg         [ 4:0]  adc_ch5_shift_d;
-  reg         [ 4:0]  adc_ch6_shift_d;
-  reg         [ 4:0]  adc_ch7_shift_d;
+  reg         [ 3:0]  adc_ch0_shift_d;
+  reg         [ 3:0]  adc_ch1_shift_d;
+  reg         [ 3:0]  adc_ch2_shift_d;
+  reg         [ 3:0]  adc_ch3_shift_d;
+  reg         [ 3:0]  adc_ch4_shift_d;
+  reg         [ 3:0]  adc_ch5_shift_d;
+  reg         [ 3:0]  adc_ch6_shift_d;
+  reg         [ 3:0]  adc_ch7_shift_d;
 
   reg         [ 2:0]  lane_0_data = 'd0;
   reg         [ 2:0]  lane_1_data = 'd0;
@@ -150,7 +150,7 @@ module axi_ltc235x_cmos #(
 
   wire                scko_i;
 
-  // instantiations
+  ////////////////////////////////////////////////////// CLOCK SIGNALS
 
     always @(posedge clk) begin
     if (rst == 1'b1) begin
@@ -193,6 +193,8 @@ module axi_ltc235x_cmos #(
   assign scki = scki_i | ~aquire_data;
   assign scko_i = scko & ~busy_m1;
 
+  /////////////////////////////////////////////////////////// DATA FLOW
+
   /*
   The device sends each channel data on one of the 8 lines.
   Data is stored in the device in a ring buffer. After the first packet is read
@@ -225,6 +227,58 @@ module axi_ltc235x_cmos #(
     2. The user wants to capture channel 0, 8 reading cycles are required.
   */
 
+  // capture data per lane in rx buffers adc_lane_X
+  // every posedge of scko
+  always @(scko_i) begin
+    adc_lane_0 <= {adc_lane_0[BW-1:0], db_i[0]};
+    adc_lane_1 <= {adc_lane_1[BW-1:0], db_i[1]};
+    adc_lane_2 <= {adc_lane_2[BW-1:0], db_i[2]};
+    adc_lane_3 <= {adc_lane_3[BW-1:0], db_i[3]};
+    adc_lane_4 <= {adc_lane_4[BW-1:0], db_i[4]};
+    adc_lane_5 <= {adc_lane_5[BW-1:0], db_i[5]};
+    adc_lane_6 <= {adc_lane_6[BW-1:0], db_i[6]};
+    adc_lane_7 <= {adc_lane_7[BW-1:0], db_i[7]};
+  end
+
+  // store the data from the rx buffers when all bits are received
+  // when data transaction window is done
+  // index is based by lane
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      adc_data_init[0] <= 'h0;
+      adc_data_init[1] <= 'h0;
+      adc_data_init[2] <= 'h0;
+      adc_data_init[3] <= 'h0;
+      adc_data_init[4] <= 'h0;
+      adc_data_init[5] <= 'h0;
+      adc_data_init[6] <= 'h0;
+      adc_data_init[7] <= 'h0;
+      data_counter <= 'h0;
+    end else begin
+      data_counter <= scki_counter;
+      if (data_counter == DW) begin
+        adc_data_init[0] <= adc_lane_0;
+        adc_data_init[1] <= adc_lane_1;
+        adc_data_init[2] <= adc_lane_2;
+        adc_data_init[3] <= adc_lane_3;
+        adc_data_init[4] <= adc_lane_4;
+        adc_data_init[5] <= adc_lane_5;
+        adc_data_init[6] <= adc_lane_6;
+        adc_data_init[7] <= adc_lane_7;
+      end else begin
+        adc_data_init[0] <= adc_data_init[0];
+        adc_data_init[1] <= adc_data_init[1];
+        adc_data_init[2] <= adc_data_init[2];
+        adc_data_init[3] <= adc_data_init[3];
+        adc_data_init[4] <= adc_data_init[4];
+        adc_data_init[5] <= adc_data_init[5];
+        adc_data_init[6] <= adc_data_init[6];
+        adc_data_init[7] <= adc_data_init[7];
+      end
+    end
+  end
+
+  // monitor which ch corresponds to which lane
   always @(posedge clk) begin
     if (start_transfer_s) begin
       lane_0_data <= 3'd0;
@@ -266,61 +320,7 @@ module axi_ltc235x_cmos #(
     end
   end
 
-  assign aquire_data = ~((ch_data_lock[0] | ~adc_enable[0]) &
-                         (ch_data_lock[1] | ~adc_enable[1]) &
-                         (ch_data_lock[2] | ~adc_enable[2]) &
-                         (ch_data_lock[3] | ~adc_enable[3]) &
-                         (ch_data_lock[4] | ~adc_enable[4]) &
-                         (ch_data_lock[5] | ~adc_enable[5]) &
-                         (ch_data_lock[6] | ~adc_enable[6]) &
-                         (ch_data_lock[7] | ~adc_enable[7]));
-
-  // capture data
-  always @(scko_i) begin
-    adc_lane_0 <= {adc_lane_0[BW-1:0], db_i[0]};
-    adc_lane_1 <= {adc_lane_1[BW-1:0], db_i[1]};
-    adc_lane_2 <= {adc_lane_2[BW-1:0], db_i[2]};
-    adc_lane_3 <= {adc_lane_3[BW-1:0], db_i[3]};
-    adc_lane_4 <= {adc_lane_4[BW-1:0], db_i[4]};
-    adc_lane_5 <= {adc_lane_5[BW-1:0], db_i[5]};
-    adc_lane_6 <= {adc_lane_6[BW-1:0], db_i[6]};
-    adc_lane_7 <= {adc_lane_7[BW-1:0], db_i[7]};
-  end
-
-  always @(posedge clk) begin
-    if (rst == 1'b1) begin
-      adc_valid_init <= 1'b0;
-    end else begin
-      if (data_counter == DW && adc_valid_init == 1'b0) begin
-        adc_valid_init <= 1'b1;
-      end else begin
-        adc_valid_init <= 1'b0;
-      end
-    end
-  end
-
-  always @(posedge clk) begin
-    if (rst == 1'b1 || adc_valid == 1'b1) begin
-      adc_valid <= 1'b0;
-      adc_valid_init_d <= 1'b0;
-      ch_capture <= 9'd0;
-      ch_captured <= 9'd0;
-    end else begin
-      ch_capture <= ch_data_lock;
-      ch_captured <= ch_capture;
-      adc_valid_init_d <= adc_valid_init;
-      adc_valid <= adc_valid_init_d &
-                     (ch_captured[0] | ~adc_enable[0]) &
-                     (ch_captured[1] | ~adc_enable[1]) &
-                     (ch_captured[2] | ~adc_enable[2]) &
-                     (ch_captured[3] | ~adc_enable[3]) &
-                     (ch_captured[4] | ~adc_enable[4]) &
-                     (ch_captured[5] | ~adc_enable[5]) &
-                     (ch_captured[6] | ~adc_enable[6]) &
-                     (ch_captured[7] | ~adc_enable[7]);
-    end
-  end
-
+  // delay active lane status and channel per lane for 1 clock cycle
   always @(posedge clk) begin
     if (rst == 1'b1 || adc_valid == 1'b1) begin
       adc_ch0_shift <= 4'd0;
@@ -359,41 +359,8 @@ module axi_ltc235x_cmos #(
     end
   end
 
-  always @(posedge clk) begin
-    if (rst == 1'b1) begin
-      adc_data_init[0] <= 'h0;
-      adc_data_init[1] <= 'h0;
-      adc_data_init[2] <= 'h0;
-      adc_data_init[3] <= 'h0;
-      adc_data_init[4] <= 'h0;
-      adc_data_init[5] <= 'h0;
-      adc_data_init[6] <= 'h0;
-      adc_data_init[7] <= 'h0;
-      data_counter <= 'h0;
-    end else begin
-      data_counter <= scki_counter;
-      if (data_counter == DW) begin
-        adc_data_init[0] <= adc_lane_0;
-        adc_data_init[1] <= adc_lane_1;
-        adc_data_init[2] <= adc_lane_2;
-        adc_data_init[3] <= adc_lane_3;
-        adc_data_init[4] <= adc_lane_4;
-        adc_data_init[5] <= adc_lane_5;
-        adc_data_init[6] <= adc_lane_6;
-        adc_data_init[7] <= adc_lane_7;
-      end else begin
-        adc_data_init[0] <= adc_data_init[0];
-        adc_data_init[1] <= adc_data_init[1];
-        adc_data_init[2] <= adc_data_init[2];
-        adc_data_init[3] <= adc_data_init[3];
-        adc_data_init[4] <= adc_data_init[4];
-        adc_data_init[5] <= adc_data_init[5];
-        adc_data_init[6] <= adc_data_init[6];
-        adc_data_init[7] <= adc_data_init[7];
-      end
-    end
-  end
-
+  // stores the data from the rx buffer but now based on ch
+  // index is based on ch, not lane anymore
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       adc_data_store[0] <= 'd0;
@@ -406,37 +373,38 @@ module axi_ltc235x_cmos #(
       adc_data_store[7] <= 'd0;
     end else begin
       if (!adc_valid_init_d & adc_valid_init) begin
-        if (adc_ch0_shift_d[4] == 1'b1) begin
+        if (adc_ch0_shift_d[3] == 1'b1) begin
           adc_data_store[adc_ch0_shift_d[2:0]] <= adc_data_init[0];
         end
-        if (adc_ch1_shift_d[4] == 1'b1) begin
+        if (adc_ch1_shift_d[3] == 1'b1) begin
           adc_data_store[adc_ch1_shift_d[2:0]] <= adc_data_init[1];
         end
-        if (adc_ch2_shift_d[4] == 1'b1) begin
+        if (adc_ch2_shift_d[3] == 1'b1) begin
           adc_data_store[adc_ch2_shift_d[2:0]] <= adc_data_init[2];
         end
-        if (adc_ch3_shift_d[4] == 1'b1) begin
+        if (adc_ch3_shift_d[3] == 1'b1) begin
           adc_data_store[adc_ch3_shift_d[2:0]] <= adc_data_init[3];
         end
-        if (adc_ch4_shift_d[4] == 1'b1) begin
+        if (adc_ch4_shift_d[3] == 1'b1) begin
           adc_data_store[adc_ch4_shift_d[2:0]] <= adc_data_init[4];
         end
-        if (adc_ch5_shift_d[4] == 1'b1) begin
+        if (adc_ch5_shift_d[3] == 1'b1) begin
           adc_data_store[adc_ch5_shift_d[2:0]] <= adc_data_init[5];
         end
-        if (adc_ch6_shift_d[4] == 1'b1) begin
+        if (adc_ch6_shift_d[3] == 1'b1) begin
           adc_data_store[adc_ch6_shift_d[2:0]] <= adc_data_init[6];
         end
-        if (adc_ch7_shift_d[4] == 1'b1) begin
+        if (adc_ch7_shift_d[3] == 1'b1) begin
           adc_data_store[adc_ch7_shift_d[2:0]] <= adc_data_init[7];
         end
       end
     end
   end
 
+  // extract info from the data bits
+  // TODO: make sure this is ltc235x specific
   genvar i;
   generate
-
     for (i=0; i < 8; i=i+1) begin: format
       if (PACKET_FORMAT == 0) begin
         assign adc_data_s[i] = {{12{adc_data_store[i][19]}}, adc_data_store[i]};
@@ -459,10 +427,9 @@ module axi_ltc235x_cmos #(
         end
       end
     end
-
-
   endgenerate
 
+  // assign extracted info to output
   assign adc_data_0 = adc_data_s[0];
   assign adc_data_1 = adc_data_s[1];
   assign adc_data_2 = adc_data_s[2];
@@ -480,6 +447,58 @@ module axi_ltc235x_cmos #(
   assign adc_ch5_id = adc_ch_id_s[5];
   assign adc_ch6_id = adc_ch_id_s[6];
   assign adc_ch7_id = adc_ch_id_s[7];
+
+//////////////////////////////////////////////////////////// VALID SIGNAL
+
+  assign aquire_data = ~((ch_data_lock[0] | ~adc_enable[0]) &
+                         (ch_data_lock[1] | ~adc_enable[1]) &
+                         (ch_data_lock[2] | ~adc_enable[2]) &
+                         (ch_data_lock[3] | ~adc_enable[3]) &
+                         (ch_data_lock[4] | ~adc_enable[4]) &
+                         (ch_data_lock[5] | ~adc_enable[5]) &
+                         (ch_data_lock[6] | ~adc_enable[6]) &
+                         (ch_data_lock[7] | ~adc_enable[7]));
+
+  always @(posedge clk) begin
+    if (rst == 1'b1) begin
+      adc_valid_init <= 1'b0;
+    end else begin
+      if (data_counter == DW && adc_valid_init == 1'b0) begin
+        adc_valid_init <= 1'b1;
+      end else begin
+        adc_valid_init <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (rst == 1'b1 || adc_valid == 1'b1) begin
+      adc_valid <= 1'b0;
+      adc_valid_init_d <= 1'b0;
+      ch_capture <= 9'd0;
+      ch_captured <= 9'd0;
+    end else begin
+      ch_capture <= ch_data_lock;
+      ch_captured <= ch_capture;
+      adc_valid_init_d <= adc_valid_init;
+      adc_valid <= adc_valid_init_d &
+                     (ch_captured[0] | ~adc_enable[0]) &
+                     (ch_captured[1] | ~adc_enable[1]) &
+                     (ch_captured[2] | ~adc_enable[2]) &
+                     (ch_captured[3] | ~adc_enable[3]) &
+                     (ch_captured[4] | ~adc_enable[4]) &
+                     (ch_captured[5] | ~adc_enable[5]) &
+                     (ch_captured[6] | ~adc_enable[6]) &
+                     (ch_captured[7] | ~adc_enable[7]);
+    end
+  end
+
+  
+
+  
+
+  
+
 
 	// db_o (TODO)
 
