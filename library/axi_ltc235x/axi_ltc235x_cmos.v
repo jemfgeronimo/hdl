@@ -402,30 +402,11 @@ module axi_ltc235x_cmos #(
   end
 
   // extract info from the data bits
-  // TODO: make sure this is ltc235x specific
   genvar i;
   generate
     for (i=0; i < 8; i=i+1) begin: format
-      if (PACKET_FORMAT == 0) begin
-        assign adc_data_s[i] = {{12{adc_data_store[i][19]}}, adc_data_store[i]};
-        assign adc_ch_id_s[i] = 3'd0;
-      end else if (PACKET_FORMAT == 1) begin
-        if (OVERSMP_ENABLE == 0) begin
-          assign adc_data_s[i] = {{12{adc_data_store[i][23]}}, adc_data_store[i][23:4]};
-          assign adc_ch_id_s[i] = adc_data_store[i][2:0];
-        end else if (OVERSMP_ENABLE == 1) begin
-          assign adc_data_s[i] = {{8{adc_data_store[i][23]}}, adc_data_store[i][23:0]};
-          assign adc_ch_id_s[i] = 3'd0;
-        end
-      end else begin
-        if (OVERSMP_ENABLE == 0) begin
-          assign adc_data_s[i] = {{12{adc_data_store[i][31]}}, adc_data_store[i][31:12]};
-          assign adc_ch_id_s[i] = adc_data_store[i][10:7];
-        end else if (OVERSMP_ENABLE == 1) begin
-          assign adc_data_s[i] = {{8{adc_data_store[i][31]}}, adc_data_store[i][31:8]};
-          assign adc_ch_id_s[i] = adc_data_store[i][6:4];
-        end
-      end
+      assign adc_data_s[i] = {{14{adc_data_store[i][23]}}, adc_data_store[i][23:6]};
+      assign adc_ch_id_s[i] = adc_data_store[i][5:3];
     end
   endgenerate
 
