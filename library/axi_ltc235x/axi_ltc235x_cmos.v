@@ -78,11 +78,20 @@ module axi_ltc235x_cmos #(
   output reg              adc_valid
 );
 
-  localparam NEG_EDGE = 1;	// unused
   localparam DW = 24;				// packet size
 	localparam BW = DW - 1;
 
   // internal registers
+
+  reg                 busy_m1;
+  reg                 busy_m2;
+  reg                 busy_m3;
+
+  reg         [ 4:0]  scki_counter = 5'h0;
+  reg         [ 4:0]  data_counter = 5'h0;
+
+  reg                 scki_i;
+  reg                 scki_d;
 
   reg         [BW:0]  adc_lane_0;
   reg         [BW:0]  adc_lane_1;
@@ -93,21 +102,17 @@ module axi_ltc235x_cmos #(
   reg         [BW:0]  adc_lane_6;
   reg         [BW:0]  adc_lane_7;
 
-  reg         [ 4:0]  data_counter = 5'h0;
-  reg         [ 4:0]  scki_counter = 5'h0;
-  reg         [ 4:0]  data_packets = 5'h0;	// unused
-  reg         [ 4:0]  req_packets = 5'h0;		// unused
-
-  reg                 scki_i;
-  reg                 scki_d;
-
-  reg         [BW:0]  adc_data_store[7:0];
   reg         [BW:0]  adc_data_init[7:0];
-  reg                 adc_valid_init;
-  reg                 adc_valid_init_d;
+  reg         [BW:0]  adc_data_store[7:0];
 
-  reg         [ 7:0]  ch_capture;
-  reg         [ 7:0]  ch_captured;
+  reg         [ 2:0]  lane_0_data = 'd0;
+  reg         [ 2:0]  lane_1_data = 'd0;
+  reg         [ 2:0]  lane_2_data = 'd0;
+  reg         [ 2:0]  lane_3_data = 'd0;
+  reg         [ 2:0]  lane_4_data = 'd0;
+  reg         [ 2:0]  lane_5_data = 'd0;
+  reg         [ 2:0]  lane_6_data = 'd0;
+  reg         [ 2:0]  lane_7_data = 'd0;
 
   reg         [ 3:0]  adc_ch0_shift;
   reg         [ 3:0]  adc_ch1_shift;
@@ -127,31 +132,26 @@ module axi_ltc235x_cmos #(
   reg         [ 3:0]  adc_ch6_shift_d;
   reg         [ 3:0]  adc_ch7_shift_d;
 
-  reg         [ 2:0]  lane_0_data = 'd0;
-  reg         [ 2:0]  lane_1_data = 'd0;
-  reg         [ 2:0]  lane_2_data = 'd0;
-  reg         [ 2:0]  lane_3_data = 'd0;
-  reg         [ 2:0]  lane_4_data = 'd0;
-  reg         [ 2:0]  lane_5_data = 'd0;
-  reg         [ 2:0]  lane_6_data = 'd0;
-  reg         [ 2:0]  lane_7_data = 'd0;
-  reg         [ 7:0]  ch_data_lock = 'hff;
+  reg                 adc_valid_init;
+  reg                 adc_valid_init_d;
 
-  reg                 busy_m1;
-  reg                 busy_m2;
-  reg                 busy_m3;
+  reg         [ 7:0]  ch_data_lock = 'hff;
+  reg         [ 7:0]  ch_capture;
+  reg         [ 7:0]  ch_captured;
 
   // internal wires
+
+  wire                start_transfer_s;
+
+  wire                scki_cnt_rst;
+  wire                scko_i;
+
+  wire                acquire_data;
 
   wire        [31:0]  adc_data_s[7:0];
   wire        [ 2:0]  adc_ch_id_s[7:0];
   wire        [ 2:0]  adc_ch_softspan_s[7:0];
 
-  wire                start_transfer_s;
-  wire                acquire_data;
-  wire                scki_cnt_rst;
-
-  wire                scko_i;
 
   ////////////////////////////////////////////////////// SCKI
 
@@ -192,14 +192,6 @@ module axi_ltc235x_cmos #(
     end
   end
 
-  assign acquire_data = ~((ch_data_lock[0] | ~adc_enable[0]) &
-                         (ch_data_lock[1] | ~adc_enable[1]) &
-                         (ch_data_lock[2] | ~adc_enable[2]) &
-                         (ch_data_lock[3] | ~adc_enable[3]) &
-                         (ch_data_lock[4] | ~adc_enable[4]) &
-                         (ch_data_lock[5] | ~adc_enable[5]) &
-                         (ch_data_lock[6] | ~adc_enable[6]) &
-                         (ch_data_lock[7] | ~adc_enable[7]));
   assign scki_cnt_rst = (scki_counter == DW) ? 1'b1 : 1'b0;
   assign scki = scki_i | ~acquire_data;
   assign scko_i = scko & ~busy_m1;
@@ -330,6 +322,15 @@ module axi_ltc235x_cmos #(
     end
   end
 
+  assign acquire_data = ~((ch_data_lock[0] | ~adc_enable[0]) &
+                         (ch_data_lock[1] | ~adc_enable[1]) &
+                         (ch_data_lock[2] | ~adc_enable[2]) &
+                         (ch_data_lock[3] | ~adc_enable[3]) &
+                         (ch_data_lock[4] | ~adc_enable[4]) &
+                         (ch_data_lock[5] | ~adc_enable[5]) &
+                         (ch_data_lock[6] | ~adc_enable[6]) &
+                         (ch_data_lock[7] | ~adc_enable[7]));
+
   // hold lane status and lane channel
   // for datasyncing with valid signal
   always @(posedge clk) begin
@@ -442,6 +443,7 @@ module axi_ltc235x_cmos #(
   assign adc_ch7_id = adc_ch_id_s[7];
 
 //////////////////////////////////////////////////////////// VALID SIGNAL
+
   // initial valid signal
   always @(posedge clk) begin
     if (rst == 1'b1) begin
@@ -455,7 +457,7 @@ module axi_ltc235x_cmos #(
     end
   end
 
-  // delayed valid signal and data_lock signal
+  // delayed both valid signal and data_lock signal
   // for datasyncing with valid signal
   always @(posedge clk) begin
     if (rst == 1'b1 || adc_valid == 1'b1) begin
