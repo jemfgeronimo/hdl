@@ -65,6 +65,7 @@ module axi_ltc235x_cmos #(
   output      [ 2:0]      adc_ch5_id,
   output      [ 2:0]      adc_ch6_id,
   output      [ 2:0]      adc_ch7_id,
+
   output      [31:0]      adc_data_0,
   output      [31:0]      adc_data_1,
   output      [31:0]      adc_data_2,
@@ -73,6 +74,7 @@ module axi_ltc235x_cmos #(
   output      [31:0]      adc_data_5,
   output      [31:0]      adc_data_6,
   output      [31:0]      adc_data_7,
+
   output reg              adc_valid
 );
 
@@ -143,16 +145,17 @@ module axi_ltc235x_cmos #(
 
   wire        [31:0]  adc_data_s[7:0];
   wire        [ 2:0]  adc_ch_id_s[7:0];
+  wire        [ 2:0]  adc_ch_softspan_s[7:0];
 
   wire                start_transfer_s;
-  wire                aquire_data;
+  wire                acquire_data;
   wire                scki_cnt_rst;
 
   wire                scko_i;
 
-  ////////////////////////////////////////////////////// CLOCK SIGNALS
+  ////////////////////////////////////////////////////// SCKI
 
-    always @(posedge clk) begin
+  always @(posedge clk) begin
     if (rst == 1'b1) begin
       busy_m1 <= 1'b0;
       busy_m2 <= 1'b0;
@@ -173,7 +176,7 @@ module axi_ltc235x_cmos #(
       scki_d <=  1'b0;
     end else begin
       scki_d <= scki_i;
-      if (aquire_data == 1'b0) begin
+      if (acquire_data == 1'b0) begin
         scki_counter <= 5'h0;
         scki_i <= 1'b1;
       end else if (scki_cnt_rst & (scki_d & ~scki_i)) begin // end of a capture
@@ -189,8 +192,16 @@ module axi_ltc235x_cmos #(
     end
   end
 
+  assign acquire_data = ~((ch_data_lock[0] | ~adc_enable[0]) &
+                         (ch_data_lock[1] | ~adc_enable[1]) &
+                         (ch_data_lock[2] | ~adc_enable[2]) &
+                         (ch_data_lock[3] | ~adc_enable[3]) &
+                         (ch_data_lock[4] | ~adc_enable[4]) &
+                         (ch_data_lock[5] | ~adc_enable[5]) &
+                         (ch_data_lock[6] | ~adc_enable[6]) &
+                         (ch_data_lock[7] | ~adc_enable[7]));
   assign scki_cnt_rst = (scki_counter == DW) ? 1'b1 : 1'b0;
-  assign scki = scki_i | ~aquire_data;
+  assign scki = scki_i | ~acquire_data;
   assign scko_i = scko & ~busy_m1;
 
   /////////////////////////////////////////////////////////// DATA FLOW
@@ -227,8 +238,7 @@ module axi_ltc235x_cmos #(
     2. The user wants to capture channel 0, 8 reading cycles are required.
   */
 
-  // capture data per lane in rx buffers adc_lane_X
-  // every posedge of scko
+  // capture data per lane in rx buffers adc_lane_X on every edge of scko
   always @(scko_i) begin
     adc_lane_0 <= {adc_lane_0[BW-1:0], db_i[0]};
     adc_lane_1 <= {adc_lane_1[BW-1:0], db_i[1]};
@@ -278,7 +288,8 @@ module axi_ltc235x_cmos #(
     end
   end
 
-  // monitor which ch corresponds to which lane
+  // lane_x_data - ch corresponds to which lane
+  // ch_data_lock[i] - locks ch i, means dont acquire data if all ch's are lock while acquire_data = 0
   always @(posedge clk) begin
     if (start_transfer_s) begin
       lane_0_data <= 3'd0;
@@ -290,7 +301,7 @@ module axi_ltc235x_cmos #(
       lane_6_data <= 3'd6;
       lane_7_data <= 3'd7;
       ch_data_lock <= 8'd0;
-    end else if (aquire_data == 1'b1 && (scki_cnt_rst & (~scki_d & scki_i))) begin
+    end else if (acquire_data == 1'b1 && (scki_cnt_rst & (~scki_d & scki_i))) begin
       lane_0_data <= lane_0_data + 1;
       lane_1_data <= lane_1_data + 1;
       lane_2_data <= lane_2_data + 1;
@@ -320,7 +331,8 @@ module axi_ltc235x_cmos #(
     end
   end
 
-  // delay active lane status and channel per lane for 1 clock cycle
+  // hold lane status and lane channel
+  // for datasyncing with valid signal
   always @(posedge clk) begin
     if (rst == 1'b1 || adc_valid == 1'b1) begin
       adc_ch0_shift <= 4'd0;
@@ -359,7 +371,7 @@ module axi_ltc235x_cmos #(
     end
   end
 
-  // stores the data from the rx buffer but now based on ch
+  // stores the data from the rx buffer, but now based on ch
   // index is based on ch, not lane anymore
   always @(posedge clk) begin
     if (rst == 1'b1) begin
@@ -407,10 +419,11 @@ module axi_ltc235x_cmos #(
     for (i=0; i < 8; i=i+1) begin: format
       assign adc_data_s[i] = {{14{adc_data_store[i][23]}}, adc_data_store[i][23:6]};
       assign adc_ch_id_s[i] = adc_data_store[i][5:3];
+      assign adc_ch_softspan_s[i] = adc_data_store[i][2:0];
     end
   endgenerate
 
-  // assign extracted info to output
+  // assign extracted info to corresponding outputs
   assign adc_data_0 = adc_data_s[0];
   assign adc_data_1 = adc_data_s[1];
   assign adc_data_2 = adc_data_s[2];
@@ -430,16 +443,7 @@ module axi_ltc235x_cmos #(
   assign adc_ch7_id = adc_ch_id_s[7];
 
 //////////////////////////////////////////////////////////// VALID SIGNAL
-
-  assign aquire_data = ~((ch_data_lock[0] | ~adc_enable[0]) &
-                         (ch_data_lock[1] | ~adc_enable[1]) &
-                         (ch_data_lock[2] | ~adc_enable[2]) &
-                         (ch_data_lock[3] | ~adc_enable[3]) &
-                         (ch_data_lock[4] | ~adc_enable[4]) &
-                         (ch_data_lock[5] | ~adc_enable[5]) &
-                         (ch_data_lock[6] | ~adc_enable[6]) &
-                         (ch_data_lock[7] | ~adc_enable[7]));
-
+  // initial valid signal
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       adc_valid_init <= 1'b0;
@@ -452,12 +456,14 @@ module axi_ltc235x_cmos #(
     end
   end
 
+  // delayed valid signal and data_lock signal
+  // for datasyncing with valid signal
   always @(posedge clk) begin
     if (rst == 1'b1 || adc_valid == 1'b1) begin
       adc_valid <= 1'b0;
       adc_valid_init_d <= 1'b0;
-      ch_capture <= 9'd0;
-      ch_captured <= 9'd0;
+      ch_capture <= 8'd0;
+      ch_captured <= 8'd0;
     end else begin
       ch_capture <= ch_data_lock;
       ch_captured <= ch_capture;
@@ -474,14 +480,10 @@ module axi_ltc235x_cmos #(
     end
   end
 
-  
-
-  
-
-  
-
-
 	// db_o (TODO)
+  // is softspan config input or parameter?
+
+  // TODO: add support for other ltc235x
 
 endmodule
 
