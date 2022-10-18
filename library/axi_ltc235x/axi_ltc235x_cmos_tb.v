@@ -39,11 +39,11 @@ module axi_ltc235x_cmos_tb ();
 
 	parameter NUM_CHANNELS = 8;	// 8 for 2358, 4 for 2357, 2 for 2353
 	parameter DATA_WIDTH = 18;	// 18 or 16
-  parameter ACTIVE_LANE = 8'b1111_1111;
+  parameter ACTIVE_LANE = 8'b0001_0000;
 
 	reg                   resetn = 0;
   reg                   clk = 0;
-  reg				[ 7:0]			adc_enable = 'bff;
+  reg				[ 7:0]			adc_enable = 'h80;//'hff;
 	reg				[23:0]			softspan;
 
   // physical interface
@@ -51,7 +51,6 @@ module axi_ltc235x_cmos_tb ();
   wire                  scki;
   wire                  db_o;
   reg                   scko = 1;
-  reg       [ 7:0]      db_i;
   reg                   rx_busy = 0;
 
   // FIFO interface
@@ -75,38 +74,43 @@ module axi_ltc235x_cmos_tb ();
   wire 		              adc_valid;
 
 	// other registers
-  reg         [31:0]      rx_db_i[0:7];
-  wire        [23:0]      rx_db_i_24[0:7];
-  reg         [ 4:0]      db_i_index = 23;
-  reg         [ 3:0]      ring_buffer_index = 0;
+  reg       [31:0]      rx_db_i[0:7];
+  wire      [23:0]      rx_db_i_24[0:7];
+  reg       [ 4:0]      db_i_index = 23;
+  reg       [ 3:0]      ring_buffer_index = 0;
 
-  reg         [ 3:0]      ch_index_lane_0 = 0;
-  reg         [ 3:0]      ch_index_lane_1 = 1;
-  reg         [ 3:0]      ch_index_lane_2 = 2;
-  reg         [ 3:0]      ch_index_lane_3 = 3;
-  reg         [ 3:0]      ch_index_lane_4 = 4;
-  reg         [ 3:0]      ch_index_lane_5 = 5;
-  reg         [ 3:0]      ch_index_lane_6 = 6;
-  reg         [ 3:0]      ch_index_lane_7 = 7;
-  reg         [ 7:0]      db_i_shift = 0;
+  reg       [ 2:0]      ch_index_lane_0 = 0;
+  reg       [ 2:0]      ch_index_lane_1 = 1;
+  reg       [ 2:0]      ch_index_lane_2 = 2;
+  reg       [ 2:0]      ch_index_lane_3 = 3;
+  reg       [ 2:0]      ch_index_lane_4 = 4;
+  reg       [ 2:0]      ch_index_lane_5 = 5;
+  reg       [ 2:0]      ch_index_lane_6 = 6;
+  reg       [ 2:0]      ch_index_lane_7 = 7;
+  reg       [ 7:0]      db_i_shift = 0;
 
-  reg                     rx_busy_d = 0;
-  reg                     action = 'd0;
+  reg                   rx_busy_d = 0;
+  reg                   action = 'd0;
+  reg                   action_d = 'd0;
+
+	reg				[2:0] 			busy_counter = 'd0;
+
+	reg 									scki_d = 0;
 
 	axi_ltc235x_cmos #(
 		.NUM_CHANNELS (NUM_CHANNELS),
 		.DATA_WIDTH (DATA_WIDTH),
 		.ACTIVE_LANE (ACTIVE_LANE)
 	) i_ltc235x_cmos (
-		.rst (resetn),
+		.rst (!resetn),
 		.clk (clk),
 		.adc_enable (adc_enable),
 		.softspan (softspan),
 
 		.scki (scki),
-		.db_o (db_i_shift),
+		.db_o (db_o),
 		.scko (scko),
-		.db_i (db_i),
+		.db_i (db_i_shift),
 		.busy (rx_busy),
 
 		.adc_ch0_id (adc_ch0_id),
@@ -117,7 +121,7 @@ module axi_ltc235x_cmos_tb ();
 		.adc_ch5_id (adc_ch5_id),
 		.adc_ch6_id (adc_ch6_id),
 		.adc_ch7_id (adc_ch7_id),
-		.adc_data_0 (adc_data_0).
+		.adc_data_0 (adc_data_0),
 		.adc_data_1 (adc_data_1),
 		.adc_data_2 (adc_data_2),
 		.adc_data_3 (adc_data_3),
@@ -135,32 +139,43 @@ module axi_ltc235x_cmos_tb ();
 		resetn <= 1'b1;
 		#100
 		action <= 1;
-		rx_db_i[0] <= 'h80000;
-		rx_db_i[1] <= 'h80001;
-		rx_db_i[2] <= 'h80002;
-		rx_db_i[3] <= 'h80003;
-		rx_db_i[4] <= 'h80004;
-		rx_db_i[5] <= 'h80005;
-		rx_db_i[6] <= 'h80006;
-		rx_db_i[7] <= 'h80007;
+		rx_db_i[0] <= 'h8000;
+		rx_db_i[1] <= 'h8001;
+		rx_db_i[2] <= 'h8002;
+		rx_db_i[3] <= 'h8003;
+		rx_db_i[4] <= 'h8004;
+		rx_db_i[5] <= 'h8005;
+		rx_db_i[6] <= 'h8006;
+		rx_db_i[7] <= 'h8007;
 		#6000
 		$finish;	
 	end
 
-	assign rx_db_i_24[0] = {rx_db_i[0][19:0], 4'd0};
-	assign rx_db_i_24[1] = {rx_db_i[1][19:0], 4'd1};
-	assign rx_db_i_24[2] = {rx_db_i[2][19:0], 4'd2};
-	assign rx_db_i_24[3] = {rx_db_i[3][19:0], 4'd3};
-	assign rx_db_i_24[4] = {rx_db_i[4][19:0], 4'd4};
-	assign rx_db_i_24[5] = {rx_db_i[5][19:0], 4'd5};
-	assign rx_db_i_24[6] = {rx_db_i[6][19:0], 4'd6};
-	assign rx_db_i_24[7] = {rx_db_i[7][19:0], 4'd7};
+	// TODO: include softspan
+	assign rx_db_i_24[0] = {rx_db_i[0][17:0], 3'd0, 3'd0};
+	assign rx_db_i_24[1] = {rx_db_i[1][17:0], 3'd1, 3'd0};
+	assign rx_db_i_24[2] = {rx_db_i[2][17:0], 3'd2, 3'd0};
+	assign rx_db_i_24[3] = {rx_db_i[3][17:0], 3'd3, 3'd0};
+	assign rx_db_i_24[4] = {rx_db_i[4][17:0], 3'd4, 3'd0};
+	assign rx_db_i_24[5] = {rx_db_i[5][17:0], 3'd5, 3'd0};
+	assign rx_db_i_24[6] = {rx_db_i[6][17:0], 3'd6, 3'd0};
+	assign rx_db_i_24[7] = {rx_db_i[7][17:0], 3'd7, 3'd0};
+
+  // scko logic
+  always @(posedge clk) begin
+    if (!rx_busy && rx_busy_d) begin
+      scko <= 1'b0;
+    end else if (!scki && scki_d) begin
+      scko <= ~scko;
+    end
+  end
 
 	always @(posedge clk) begin
-    if (action == 1'b0) begin
-      conv_counter <= 'd0;
-    end else begin
+    if (action == 1'b1) begin
+      action_d <= action;
       scki_d <= scki;
+
+			// update rx_db_i
       if (adc_valid && adc_data_0 == rx_db_i[0]) begin
         rx_db_i[0] <= rx_db_i[0] + 1;
         rx_db_i[1] <= rx_db_i[1] + 1;
@@ -227,7 +242,11 @@ module axi_ltc235x_cmos_tb ();
 
       rx_busy_d <= rx_busy;
 
-      if (busy_counter == 'd4) begin
+			// simulate busy signal
+      if (action && !action_d) begin
+        busy_counter <= 'd0;
+        rx_busy <= 1'b1;
+      end else if (busy_counter == 'd4) begin
         busy_counter <= 'd0;
         rx_busy <= 1'b0;
       end else if (rx_busy == 1'b1) begin

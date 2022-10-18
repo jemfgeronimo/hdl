@@ -227,12 +227,11 @@ module axi_ltc235x_cmos #(
 
   Because there is no rule for a specific number of lanes to be enabled at a given time
   the interface can handle every combination of enabled lanes with enabled channels.
-  The valid signal will only be asserted after all enabled channels are stored,
-  including the crc data(if crc_is enabled)
+  The valid signal will only be asserted after all enabled channels are stored.
   This means that the user must adjust the sampling frequency based on the
   interface clock frequency and the maximum position/index
-  difference +1 of a channel data (or crc) and the first enabled lane that will
-  pass that channels data(or crc), maximum difference is 9(e.g line 0 to crc data).
+  difference +1 of a channel data and the first enabled lane that will
+  pass that channels data, maximum difference is 8(e.g line 0 to line 7).
   e.g. If only lanes 1 and 2(0 to 7) are enabled,
     1. The user wants to capture the 6'th(0 to 7) channel, 5 reading cycles are required.
     2. The user wants to capture channel 0, 8 reading cycles are required.
