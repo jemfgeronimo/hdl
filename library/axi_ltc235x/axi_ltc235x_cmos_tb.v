@@ -38,7 +38,7 @@
 module axi_ltc235x_cmos_tb ();
   parameter NUM_CHANNELS = 8;	// 8 for 2358, 4 for 2357, 2 for 2353
   parameter DATA_WIDTH = 18;	// 18 or 16
-  parameter ACTIVE_LANE = 8'b1111_1111;
+  parameter ACTIVE_LANE = 8'b0000_0001;
   parameter SOFTSPAN_NEXT = 24'hf0_f0f0;
 
   reg                   resetn = 0;
@@ -83,6 +83,8 @@ module axi_ltc235x_cmos_tb ();
 	// other registers
   reg       [31:0]      rx_db_i[0:7];
   wire      [23:0]      rx_db_i_24[0:7];
+  reg       [ 2:0]      rx_db_i_ch[0:7];
+  reg       [ 2:0]      rx_db_i_softspan[0:7];
   reg       [ 4:0]      db_i_index = 23;
   reg       [ 3:0]      ring_buffer_index = 0;
 
@@ -109,6 +111,8 @@ module axi_ltc235x_cmos_tb ();
   // wires
 
   wire      [ 2:0]      softspan_next_s [7:0];
+  
+  genvar                i;
 
   axi_ltc235x_cmos #(
     .NUM_CHANNELS (NUM_CHANNELS),
@@ -164,27 +168,28 @@ module axi_ltc235x_cmos_tb ();
     #100
     action <= 1;
     // 18-bit data
-    rx_db_i[0] <= 'h8000;
-    rx_db_i[1] <= 'h8001;
-    rx_db_i[2] <= 'h8002;
-    rx_db_i[3] <= 'h8003;
-    rx_db_i[4] <= 'h8004;
-    rx_db_i[5] <= 'h8005;
-    rx_db_i[6] <= 'h8006;
-    rx_db_i[7] <= 'h8007;
-    #6000
+    rx_db_i[0] <= 'h28000; rx_db_i_ch[0] = 0; rx_db_i_softspan[0] = 7;
+    rx_db_i[1] <= 'h28001; rx_db_i_ch[1] = 1; rx_db_i_softspan[1] = 0;
+    rx_db_i[2] <= 'h28002; rx_db_i_ch[2] = 2; rx_db_i_softspan[2] = 6;
+    rx_db_i[3] <= 'h28003; rx_db_i_ch[3] = 3; rx_db_i_softspan[3] = 1;
+    rx_db_i[4] <= 'h28004; rx_db_i_ch[4] = 4; rx_db_i_softspan[4] = 5;
+    rx_db_i[5] <= 'h28005; rx_db_i_ch[5] = 5; rx_db_i_softspan[5] = 2;
+    rx_db_i[6] <= 'h28006; rx_db_i_ch[6] = 6; rx_db_i_softspan[6] = 4;
+    rx_db_i[7] <= 'h28007; rx_db_i_ch[7] = 7; rx_db_i_softspan[7] = 3;
+    #4500
+    action <= 0;
+    #100
+    action <= 1;
+    #3000
     $finish;	
   end
 
   // {18-bit data, channel id, softspan}
-  assign rx_db_i_24[0] = {rx_db_i[0][17:0], 3'd0, 3'd7};
-  assign rx_db_i_24[1] = {rx_db_i[1][17:0], 3'd1, 3'd6};
-  assign rx_db_i_24[2] = {rx_db_i[2][17:0], 3'd2, 3'd5};
-  assign rx_db_i_24[3] = {rx_db_i[3][17:0], 3'd3, 3'd4};
-  assign rx_db_i_24[4] = {rx_db_i[4][17:0], 3'd4, 3'd3};
-  assign rx_db_i_24[5] = {rx_db_i[5][17:0], 3'd5, 3'd2};
-  assign rx_db_i_24[6] = {rx_db_i[6][17:0], 3'd6, 3'd1};
-  assign rx_db_i_24[7] = {rx_db_i[7][17:0], 3'd7, 3'd0};
+  generate
+    for (i = 0; i < 8; i = i + 1) begin
+      assign rx_db_i_24[i] = {rx_db_i[i][17:0], rx_db_i_ch[i], rx_db_i_softspan[i]};
+    end
+  endgenerate
 
   // scko logic
   always @(posedge clk) begin
@@ -197,8 +202,8 @@ module axi_ltc235x_cmos_tb ();
 
   // simulate transmission of bits from the adc
   always @(posedge clk) begin
+    action_d <= action;
     if (action == 1'b1) begin
-      action_d <= action;
       scki_d <= scki;
 
       // update rx_db_i for next conversion
@@ -293,7 +298,6 @@ module axi_ltc235x_cmos_tb ();
   end
 
   generate
-    genvar i;
     for (i = 0; i < 8; i = i + 1) begin
       assign softspan_next_s[i] = softspan_next[(2 + (i*3)) : (i*3)];
     end
