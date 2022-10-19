@@ -89,10 +89,10 @@ module axi_ltc235x_cmos_tb ();
   reg       [ 7:0]      db_i_shift = 0;
 
   reg                   rx_busy_d = 0;
+  reg       [ 2:0]      busy_counter = 'd0;
+
   reg                   action = 'd0;
   reg                   action_d = 'd0;
-
-  reg       [ 2:0]      busy_counter = 'd0;
 
   reg                   scki_d = 0;
 
