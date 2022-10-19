@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ltc235x_cmos_tb ();
+module axi_ltc235x_tb ();
   parameter NUM_CHANNELS = 8;	// 8 for 2358, 4 for 2357, 2 for 2353
   parameter DATA_WIDTH = 18;	// 18 or 16
   parameter ACTIVE_LANE = 8'b0000_0001;
@@ -115,12 +115,12 @@ module axi_ltc235x_cmos_tb ();
   
   genvar                i;
 
-  axi_ltc235x_cmos #(
+  axi_ltc235x #(
     .NUM_CHANNELS (NUM_CHANNELS),
     .DATA_WIDTH (DATA_WIDTH),
     .ACTIVE_LANE (ACTIVE_LANE),
     .SOFTSPAN_NEXT (SOFTSPAN_NEXT)
-  ) i_ltc235x_cmos (
+  ) i_ltc235x (
     .rst (!resetn),
     .clk (clk),
     .adc_enable (adc_enable),
