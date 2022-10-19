@@ -39,13 +39,12 @@ module axi_ltc235x_cmos #(
 	parameter NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
 	parameter DATA_WIDTH = 18,	// 18 or 16
 	parameter ACTIVE_LANE = 8'b1111_1111,
-	parameter SOFTSPAN = 24'hff_ffff
+	parameter SOFTSPAN_NEXT = 24'hff_ffff
 ) (
 
   input                   rst,
   input                   clk,
   input       [ 7:0]      adc_enable,
-  input       [23:0]      softspan,
 
   // physical interface
 
@@ -513,7 +512,7 @@ module axi_ltc235x_cmos #(
       end
     end
   end
-  assign db_o = SOFTSPAN[db_o_index];
+  assign db_o = SOFTSPAN_NEXT[db_o_index];
 
   // TODO: add support for other ltc235x
 
