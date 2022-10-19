@@ -240,9 +240,8 @@ module axi_ltc235x_cmos_tb ();
         db_i_shift[7] <= rx_db_i_24[ch_index_lane_7][db_i_index];
       end
 
-      rx_busy_d <= rx_busy;
-
 			// simulate busy signal
+      rx_busy_d <= rx_busy;
       if (action && !action_d) begin
         busy_counter <= 'd0;
         rx_busy <= 1'b1;
