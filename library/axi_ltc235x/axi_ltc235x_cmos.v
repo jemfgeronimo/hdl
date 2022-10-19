@@ -38,14 +38,14 @@
 module axi_ltc235x_cmos #(
 	parameter NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
 	parameter DATA_WIDTH = 18,	// 18 or 16
-  parameter ACTIVE_LANE = 8'b1111_1111
+	parameter ACTIVE_LANE = 8'b1111_1111
 	//parameter SOFTSPAN
 ) (
 
   input                   rst,
   input                   clk,
-  input				[ 7:0]			adc_enable,
-	input				[23:0]			softspan,
+  input       [ 7:0]      adc_enable,
+  input       [23:0]      softspan,
 
   // physical interface
 
@@ -78,8 +78,8 @@ module axi_ltc235x_cmos #(
   output reg              adc_valid
 );
 
-  localparam DW = 24;				// packet size
-	localparam BW = DW - 1;
+  localparam DW = 24;     // packet size
+  localparam BW = DW - 1;
 
   // internal registers
 
