@@ -38,12 +38,12 @@
 module axi_ltc235x_cmos_tb ();
   parameter NUM_CHANNELS = 8;	// 8 for 2358, 4 for 2357, 2 for 2353
   parameter DATA_WIDTH = 18;	// 18 or 16
-  parameter ACTIVE_LANE = 8'b0001_0000;
+  parameter ACTIVE_LANE = 8'b1111_1111;
   parameter SOFTSPAN_NEXT = 24'hf0_f0f0;
 
   reg                   resetn = 0;
   reg                   clk = 0;
-  reg       [ 7:0]      adc_enable = 'h80;//'hff;
+  reg       [ 7:0]      adc_enable = 'b1111_1111;
 
   // physical interface
 
@@ -71,7 +71,7 @@ module axi_ltc235x_cmos_tb ();
   wire      [31:0]      adc_data_6;
   wire      [31:0]      adc_data_7;
   wire      [ 2:0]      adc_softspan_0;
-  wire      [ 2:0]      adc_softspan_0;
+  wire      [ 2:0]      adc_softspan_1;
   wire      [ 2:0]      adc_softspan_2;
   wire      [ 2:0]      adc_softspan_3;
   wire      [ 2:0]      adc_softspan_4;
@@ -108,7 +108,7 @@ module axi_ltc235x_cmos_tb ();
 
   // wires
 
-  wire      [ 2:0]      softspan_next_s;
+  wire      [ 2:0]      softspan_next_s [7:0];
 
   axi_ltc235x_cmos #(
     .NUM_CHANNELS (NUM_CHANNELS),
@@ -294,8 +294,8 @@ module axi_ltc235x_cmos_tb ();
 
   generate
     genvar i;
-    for (i = 0, i < 24; i = i + 3) begin : softspan_next_lane
-      assign softspan_next_s = softspan_next[(2+i):i];
+    for (i = 0; i < 8; i = i + 1) begin
+      assign softspan_next_s[i] = softspan_next[(2 + (i*3)) : (i*3)];
     end
   endgenerate
 
