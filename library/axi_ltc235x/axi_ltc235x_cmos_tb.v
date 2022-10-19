@@ -138,6 +138,7 @@ module axi_ltc235x_cmos_tb ();
     resetn <= 1'b1;
     #100
     action <= 1;
+    // 18-bit data
     rx_db_i[0] <= 'h8000;
     rx_db_i[1] <= 'h8001;
     rx_db_i[2] <= 'h8002;
@@ -151,6 +152,7 @@ module axi_ltc235x_cmos_tb ();
   end
 
   // TODO: include softspan
+  // {18-bit data, channel id, softspan}
   assign rx_db_i_24[0] = {rx_db_i[0][17:0], 3'd0, 3'd0};
   assign rx_db_i_24[1] = {rx_db_i[1][17:0], 3'd1, 3'd0};
   assign rx_db_i_24[2] = {rx_db_i[2][17:0], 3'd2, 3'd0};
@@ -169,12 +171,13 @@ module axi_ltc235x_cmos_tb ();
     end
   end
 
+  // simulate transmission of bits from the adc
   always @(posedge clk) begin
     if (action == 1'b1) begin
       action_d <= action;
       scki_d <= scki;
 
-			// update rx_db_i
+      // update rx_db_i for next conversion
       if (adc_valid && adc_data_0 == rx_db_i[0]) begin
         rx_db_i[0] <= rx_db_i[0] + 1;
         rx_db_i[1] <= rx_db_i[1] + 1;
@@ -195,6 +198,11 @@ module axi_ltc235x_cmos_tb ();
         rx_db_i[7] <= rx_db_i[7];
       end
 
+      // on every posedge of scki
+      // update index of databits to be sent
+      // update index of ring buffer
+      // update ch of each lane
+      // send 1 bit at a time from the databits
       if (rx_busy_d & !rx_busy) begin
         db_i_index <= 23;
         ring_buffer_index <= 0;
