@@ -39,11 +39,11 @@ module axi_ltc235x_cmos_tb ();
   parameter NUM_CHANNELS = 8;	// 8 for 2358, 4 for 2357, 2 for 2353
   parameter DATA_WIDTH = 18;	// 18 or 16
   parameter ACTIVE_LANE = 8'b0001_0000;
+  parameter SOFTSPAN_NEXT = 24'hf0_f0f0;
 
   reg                   resetn = 0;
   reg                   clk = 0;
   reg       [ 7:0]      adc_enable = 'h80;//'hff;
-  reg       [23:0]      softspan;
 
   // physical interface
 
@@ -70,6 +70,14 @@ module axi_ltc235x_cmos_tb ();
   wire      [31:0]      adc_data_5;
   wire      [31:0]      adc_data_6;
   wire      [31:0]      adc_data_7;
+  wire      [ 2:0]      adc_softspan_0;
+  wire      [ 2:0]      adc_softspan_0;
+  wire      [ 2:0]      adc_softspan_2;
+  wire      [ 2:0]      adc_softspan_3;
+  wire      [ 2:0]      adc_softspan_4;
+  wire      [ 2:0]      adc_softspan_5;
+  wire      [ 2:0]      adc_softspan_6;
+  wire      [ 2:0]      adc_softspan_7;
   wire                  adc_valid;
 
 	// other registers
@@ -96,15 +104,21 @@ module axi_ltc235x_cmos_tb ();
 
   reg                   scki_d = 0;
 
+  reg       [23:0]      softspan_next = 24'd0;
+
+  // wires
+
+  wire      [ 2:0]      softspan_next_s;
+
   axi_ltc235x_cmos #(
     .NUM_CHANNELS (NUM_CHANNELS),
     .DATA_WIDTH (DATA_WIDTH),
-    .ACTIVE_LANE (ACTIVE_LANE)
+    .ACTIVE_LANE (ACTIVE_LANE),
+    .SOFTSPAN_NEXT (SOFTSPAN_NEXT)
   ) i_ltc235x_cmos (
     .rst (!resetn),
     .clk (clk),
     .adc_enable (adc_enable),
-    .softspan (softspan),
 
     .scki (scki),
     .db_o (db_o),
@@ -120,6 +134,7 @@ module axi_ltc235x_cmos_tb ();
     .adc_ch5_id (adc_ch5_id),
     .adc_ch6_id (adc_ch6_id),
     .adc_ch7_id (adc_ch7_id),
+
     .adc_data_0 (adc_data_0),
     .adc_data_1 (adc_data_1),
     .adc_data_2 (adc_data_2),
@@ -128,6 +143,16 @@ module axi_ltc235x_cmos_tb ();
     .adc_data_5 (adc_data_5),
     .adc_data_6 (adc_data_6),
     .adc_data_7 (adc_data_7),
+
+    .adc_softspan_0 (adc_softspan_0),
+    .adc_softspan_1 (adc_softspan_1),
+    .adc_softspan_2 (adc_softspan_2),
+    .adc_softspan_3 (adc_softspan_3),
+    .adc_softspan_4 (adc_softspan_4),
+    .adc_softspan_5 (adc_softspan_5),
+    .adc_softspan_6 (adc_softspan_6),
+    .adc_softspan_7 (adc_softspan_7),
+
     .adc_valid (adc_valid)
   );
 
@@ -151,15 +176,14 @@ module axi_ltc235x_cmos_tb ();
     $finish;	
   end
 
-  // TODO: include softspan
   // {18-bit data, channel id, softspan}
-  assign rx_db_i_24[0] = {rx_db_i[0][17:0], 3'd0, 3'd0};
-  assign rx_db_i_24[1] = {rx_db_i[1][17:0], 3'd1, 3'd0};
-  assign rx_db_i_24[2] = {rx_db_i[2][17:0], 3'd2, 3'd0};
-  assign rx_db_i_24[3] = {rx_db_i[3][17:0], 3'd3, 3'd0};
-  assign rx_db_i_24[4] = {rx_db_i[4][17:0], 3'd4, 3'd0};
-  assign rx_db_i_24[5] = {rx_db_i[5][17:0], 3'd5, 3'd0};
-  assign rx_db_i_24[6] = {rx_db_i[6][17:0], 3'd6, 3'd0};
+  assign rx_db_i_24[0] = {rx_db_i[0][17:0], 3'd0, 3'd7};
+  assign rx_db_i_24[1] = {rx_db_i[1][17:0], 3'd1, 3'd6};
+  assign rx_db_i_24[2] = {rx_db_i[2][17:0], 3'd2, 3'd5};
+  assign rx_db_i_24[3] = {rx_db_i[3][17:0], 3'd3, 3'd4};
+  assign rx_db_i_24[4] = {rx_db_i[4][17:0], 3'd4, 3'd3};
+  assign rx_db_i_24[5] = {rx_db_i[5][17:0], 3'd5, 3'd2};
+  assign rx_db_i_24[6] = {rx_db_i[6][17:0], 3'd6, 3'd1};
   assign rx_db_i_24[7] = {rx_db_i[7][17:0], 3'd7, 3'd0};
 
   // scko logic
@@ -259,7 +283,20 @@ module axi_ltc235x_cmos_tb ();
         busy_counter <= busy_counter +1;
         rx_busy <= 1'b1;
       end
+
+      // receive softspan for next conversion
+      // every posedge scki
+      if (!scki && scki_d) begin
+        softspan_next <= {softspan_next[22:0], db_o};
+      end
     end
   end
+
+  generate
+    genvar i;
+    for (i = 0, i < 24; i = i + 3) begin : softspan_next_lane
+      assign softspan_next_s = softspan_next[(2+i):i];
+    end
+  endgenerate
 
 endmodule
