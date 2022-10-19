@@ -36,15 +36,14 @@
 `timescale 1ns/100ps
 
 module axi_ltc235x_cmos_tb ();
-
-	parameter NUM_CHANNELS = 8;	// 8 for 2358, 4 for 2357, 2 for 2353
-	parameter DATA_WIDTH = 18;	// 18 or 16
+  parameter NUM_CHANNELS = 8;	// 8 for 2358, 4 for 2357, 2 for 2353
+  parameter DATA_WIDTH = 18;	// 18 or 16
   parameter ACTIVE_LANE = 8'b0001_0000;
 
-	reg                   resetn = 0;
+  reg                   resetn = 0;
   reg                   clk = 0;
-  reg				[ 7:0]			adc_enable = 'h80;//'hff;
-	reg				[23:0]			softspan;
+  reg       [ 7:0]      adc_enable = 'h80;//'hff;
+  reg       [23:0]      softspan;
 
   // physical interface
 
@@ -71,7 +70,7 @@ module axi_ltc235x_cmos_tb ();
   wire      [31:0]      adc_data_5;
   wire      [31:0]      adc_data_6;
   wire      [31:0]      adc_data_7;
-  wire 		              adc_valid;
+  wire                  adc_valid;
 
 	// other registers
   reg       [31:0]      rx_db_i[0:7];
@@ -93,73 +92,73 @@ module axi_ltc235x_cmos_tb ();
   reg                   action = 'd0;
   reg                   action_d = 'd0;
 
-	reg				[2:0] 			busy_counter = 'd0;
+  reg       [ 2:0]      busy_counter = 'd0;
 
-	reg 									scki_d = 0;
+  reg                   scki_d = 0;
 
-	axi_ltc235x_cmos #(
-		.NUM_CHANNELS (NUM_CHANNELS),
-		.DATA_WIDTH (DATA_WIDTH),
-		.ACTIVE_LANE (ACTIVE_LANE)
-	) i_ltc235x_cmos (
-		.rst (!resetn),
-		.clk (clk),
-		.adc_enable (adc_enable),
-		.softspan (softspan),
+  axi_ltc235x_cmos #(
+    .NUM_CHANNELS (NUM_CHANNELS),
+    .DATA_WIDTH (DATA_WIDTH),
+    .ACTIVE_LANE (ACTIVE_LANE)
+  ) i_ltc235x_cmos (
+    .rst (!resetn),
+    .clk (clk),
+    .adc_enable (adc_enable),
+    .softspan (softspan),
 
-		.scki (scki),
-		.db_o (db_o),
-		.scko (scko),
-		.db_i (db_i_shift),
-		.busy (rx_busy),
+    .scki (scki),
+    .db_o (db_o),
+    .scko (scko),
+    .db_i (db_i_shift),
+    .busy (rx_busy),
 
-		.adc_ch0_id (adc_ch0_id),
-		.adc_ch1_id (adc_ch1_id),
-		.adc_ch2_id (adc_ch2_id),
-		.adc_ch3_id (adc_ch3_id),
-		.adc_ch4_id (adc_ch4_id),
-		.adc_ch5_id (adc_ch5_id),
-		.adc_ch6_id (adc_ch6_id),
-		.adc_ch7_id (adc_ch7_id),
-		.adc_data_0 (adc_data_0),
-		.adc_data_1 (adc_data_1),
-		.adc_data_2 (adc_data_2),
-		.adc_data_3 (adc_data_3),
-		.adc_data_4 (adc_data_4),
-		.adc_data_5 (adc_data_5),
-		.adc_data_6 (adc_data_6),
-		.adc_data_7 (adc_data_7),
-		.adc_valid (adc_valid)
-	);
+    .adc_ch0_id (adc_ch0_id),
+    .adc_ch1_id (adc_ch1_id),
+    .adc_ch2_id (adc_ch2_id),
+    .adc_ch3_id (adc_ch3_id),
+    .adc_ch4_id (adc_ch4_id),
+    .adc_ch5_id (adc_ch5_id),
+    .adc_ch6_id (adc_ch6_id),
+    .adc_ch7_id (adc_ch7_id),
+    .adc_data_0 (adc_data_0),
+    .adc_data_1 (adc_data_1),
+    .adc_data_2 (adc_data_2),
+    .adc_data_3 (adc_data_3),
+    .adc_data_4 (adc_data_4),
+    .adc_data_5 (adc_data_5),
+    .adc_data_6 (adc_data_6),
+    .adc_data_7 (adc_data_7),
+    .adc_valid (adc_valid)
+  );
 
-	always #1 clk = ~clk;
+  always #1 clk = ~clk;
 
-	initial begin
-		#40
-		resetn <= 1'b1;
-		#100
-		action <= 1;
-		rx_db_i[0] <= 'h8000;
-		rx_db_i[1] <= 'h8001;
-		rx_db_i[2] <= 'h8002;
-		rx_db_i[3] <= 'h8003;
-		rx_db_i[4] <= 'h8004;
-		rx_db_i[5] <= 'h8005;
-		rx_db_i[6] <= 'h8006;
-		rx_db_i[7] <= 'h8007;
-		#6000
-		$finish;	
-	end
+  initial begin
+    #40
+    resetn <= 1'b1;
+    #100
+    action <= 1;
+    rx_db_i[0] <= 'h8000;
+    rx_db_i[1] <= 'h8001;
+    rx_db_i[2] <= 'h8002;
+    rx_db_i[3] <= 'h8003;
+    rx_db_i[4] <= 'h8004;
+    rx_db_i[5] <= 'h8005;
+    rx_db_i[6] <= 'h8006;
+    rx_db_i[7] <= 'h8007;
+    #6000
+    $finish;	
+  end
 
-	// TODO: include softspan
-	assign rx_db_i_24[0] = {rx_db_i[0][17:0], 3'd0, 3'd0};
-	assign rx_db_i_24[1] = {rx_db_i[1][17:0], 3'd1, 3'd0};
-	assign rx_db_i_24[2] = {rx_db_i[2][17:0], 3'd2, 3'd0};
-	assign rx_db_i_24[3] = {rx_db_i[3][17:0], 3'd3, 3'd0};
-	assign rx_db_i_24[4] = {rx_db_i[4][17:0], 3'd4, 3'd0};
-	assign rx_db_i_24[5] = {rx_db_i[5][17:0], 3'd5, 3'd0};
-	assign rx_db_i_24[6] = {rx_db_i[6][17:0], 3'd6, 3'd0};
-	assign rx_db_i_24[7] = {rx_db_i[7][17:0], 3'd7, 3'd0};
+  // TODO: include softspan
+  assign rx_db_i_24[0] = {rx_db_i[0][17:0], 3'd0, 3'd0};
+  assign rx_db_i_24[1] = {rx_db_i[1][17:0], 3'd1, 3'd0};
+  assign rx_db_i_24[2] = {rx_db_i[2][17:0], 3'd2, 3'd0};
+  assign rx_db_i_24[3] = {rx_db_i[3][17:0], 3'd3, 3'd0};
+  assign rx_db_i_24[4] = {rx_db_i[4][17:0], 3'd4, 3'd0};
+  assign rx_db_i_24[5] = {rx_db_i[5][17:0], 3'd5, 3'd0};
+  assign rx_db_i_24[6] = {rx_db_i[6][17:0], 3'd6, 3'd0};
+  assign rx_db_i_24[7] = {rx_db_i[7][17:0], 3'd7, 3'd0};
 
   // scko logic
   always @(posedge clk) begin
@@ -170,7 +169,7 @@ module axi_ltc235x_cmos_tb ();
     end
   end
 
-	always @(posedge clk) begin
+  always @(posedge clk) begin
     if (action == 1'b1) begin
       action_d <= action;
       scki_d <= scki;
@@ -240,7 +239,7 @@ module axi_ltc235x_cmos_tb ();
         db_i_shift[7] <= rx_db_i_24[ch_index_lane_7][db_i_index];
       end
 
-			// simulate busy signal
+      // simulate busy signal
       rx_busy_d <= rx_busy;
       if (action && !action_d) begin
         busy_counter <= 'd0;
