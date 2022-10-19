@@ -75,7 +75,7 @@ module axi_ltc235x_cmos #(
   output      [31:0]      adc_data_7,
 
   output      [ 2:0]      adc_softspan_0,
-  output      [ 2:0]      adc_softspan_0,
+  output      [ 2:0]      adc_softspan_1,
   output      [ 2:0]      adc_softspan_2,
   output      [ 2:0]      adc_softspan_3,
   output      [ 2:0]      adc_softspan_4,
