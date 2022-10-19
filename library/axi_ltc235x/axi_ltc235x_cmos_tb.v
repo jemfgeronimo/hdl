@@ -107,6 +107,7 @@ module axi_ltc235x_cmos_tb ();
   reg                   scki_d = 0;
 
   reg       [23:0]      softspan_next = 24'd0;
+  reg       [ 4:0]      softspan_counter = 'd0;
 
   // wires
 
@@ -177,7 +178,7 @@ module axi_ltc235x_cmos_tb ();
     rx_db_i[6] <= 'h28006; rx_db_i_ch[6] = 6; rx_db_i_softspan[6] = 4;
     rx_db_i[7] <= 'h28007; rx_db_i_ch[7] = 7; rx_db_i_softspan[7] = 3;
     #4500
-    action <= 0;
+    action <= 0;  softspan_counter <= 'd0;
     #100
     action <= 1;
     #3000
@@ -207,6 +208,7 @@ module axi_ltc235x_cmos_tb ();
       scki_d <= scki;
 
       // update rx_db_i for next conversion
+      // update rx_db_i_softspan for next conversion
       if (adc_valid && adc_data_0 == rx_db_i[0]) begin
         rx_db_i[0] <= rx_db_i[0] + 1;
         rx_db_i[1] <= rx_db_i[1] + 1;
@@ -216,6 +218,14 @@ module axi_ltc235x_cmos_tb ();
         rx_db_i[5] <= rx_db_i[5] + 1;
         rx_db_i[6] <= rx_db_i[6] + 1;
         rx_db_i[7] <= rx_db_i[7] + 1;
+        rx_db_i_softspan[0] <= rx_db_i_softspan[0] + 2;
+        rx_db_i_softspan[1] <= rx_db_i_softspan[1] + 2;
+        rx_db_i_softspan[2] <= rx_db_i_softspan[2] + 2;
+        rx_db_i_softspan[3] <= rx_db_i_softspan[3] + 2;
+        rx_db_i_softspan[4] <= rx_db_i_softspan[4] + 2;
+        rx_db_i_softspan[5] <= rx_db_i_softspan[5] + 2;
+        rx_db_i_softspan[6] <= rx_db_i_softspan[6] + 2;
+        rx_db_i_softspan[7] <= rx_db_i_softspan[7] + 2;
       end else begin
         rx_db_i[0] <= rx_db_i[0];
         rx_db_i[1] <= rx_db_i[1];
@@ -225,6 +235,14 @@ module axi_ltc235x_cmos_tb ();
         rx_db_i[5] <= rx_db_i[5];
         rx_db_i[6] <= rx_db_i[6];
         rx_db_i[7] <= rx_db_i[7];
+        rx_db_i_softspan[0] <= rx_db_i_softspan[0];
+        rx_db_i_softspan[1] <= rx_db_i_softspan[1];
+        rx_db_i_softspan[2] <= rx_db_i_softspan[2];
+        rx_db_i_softspan[3] <= rx_db_i_softspan[3];
+        rx_db_i_softspan[4] <= rx_db_i_softspan[4];
+        rx_db_i_softspan[5] <= rx_db_i_softspan[5];
+        rx_db_i_softspan[6] <= rx_db_i_softspan[6];
+        rx_db_i_softspan[7] <= rx_db_i_softspan[7];
       end
 
       // on every posedge of scki
@@ -291,8 +309,9 @@ module axi_ltc235x_cmos_tb ();
 
       // receive softspan for next conversion
       // every posedge scki
-      if (!scki && scki_d) begin
+      if (!scki && scki_d && softspan_counter < 24) begin
         softspan_next <= {softspan_next[22:0], db_o};
+        softspan_counter <= softspan_counter + 1'b1;
       end
     end
   end
