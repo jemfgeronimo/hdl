@@ -159,7 +159,6 @@ module axi_ltc235x #(
   wire    [13:0]          up_waddr_s;
 
   wire                    adc_clk_s;
-  wire                    scko_s;
 
   wire    [ 7:0]          up_adc_or_s;
   wire    [13:0]          up_addr_s;
@@ -281,7 +280,7 @@ module axi_ltc235x #(
         .adc_enable (adc_enable),
         .adc_crc_enable (adc_crc_enable),
         .scki (scki),
-        .scko (scko_s),
+        .scko (scko),
         .db_i ({lane_7,
                 lane_6,
                 lane_5,
