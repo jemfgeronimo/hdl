@@ -47,10 +47,9 @@ module axi_ltc235x #(
   parameter       LANE_5_ENABLE = "true",
   parameter       LANE_6_ENABLE = "true",
   parameter       LANE_7_ENABLE = "true",
-  parameter       OVERSMP_ENABLE = 0,
-  parameter       PACKET_FORMAT = 1,
-  parameter       ECHO_CLK_EN = 1,
-  parameter       EXTERNAL_CLK = 0
+  parameter       NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
+  parameter       DATA_WIDTH = 18,	// 18 or 16
+  parameter       SOFTSPAN_NEXT = 24'hff_ffff
 ) (
 
   // physical data interface
