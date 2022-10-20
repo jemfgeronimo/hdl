@@ -233,13 +233,6 @@ module axi_ltc235x #(
 
     if (LVDS_CMOS_N == 1) begin
       assign scki = 1'b0;
-      if (ECHO_CLK_EN == 1'b1) begin
-        assign scko_s_p = scko_p;
-        assign scko_s_n = scko_n;
-      end else begin
-        assign scko_s_p = scki_p;
-        assign scko_s_n = scki_n;
-      end
       axi_ad4858_lvds #(
         .OVERSMP_ENABLE (OVERSMP_ENABLE),
         .PACKET_FORMAT (PACKET_FORMAT))
@@ -278,11 +271,6 @@ module axi_ltc235x #(
     end else begin
       assign scki_p = 1'b0;
       assign scki_n = 1'b1;
-      if (ECHO_CLK_EN == 1'b1) begin
-        assign scko_s = scko;
-      end else begin
-        assign scko_s = scki;
-      end
       axi_ltc235x_cmos #(
         .OVERSMP_ENABLE (OVERSMP_ENABLE),
         .PACKET_FORMAT (PACKET_FORMAT),
