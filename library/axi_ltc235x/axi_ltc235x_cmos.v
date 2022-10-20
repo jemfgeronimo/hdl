@@ -428,7 +428,7 @@ module axi_ltc235x_cmos #(
   genvar i;
   generate
     for (i=0; i < 8; i=i+1) begin: format
-      assign adc_data_s[i] = {{14{0}}, adc_data_store[i][23:6]};
+      assign adc_data_s[i] = {{14{0}}, adc_data_store[i][23:6]};  // TODO: find out if data is needed to be formatted or not yet
       assign adc_ch_id_s[i] = adc_data_store[i][5:3];
       assign adc_softspan_s[i] = adc_data_store[i][2:0];
     end
