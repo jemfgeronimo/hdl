@@ -232,41 +232,6 @@ module axi_ltc235x #(
 
     if (LVDS_CMOS_N == 1) begin
       assign scki = 1'b0;
-      axi_ad4858_lvds #(
-        .OVERSMP_ENABLE (OVERSMP_ENABLE),
-        .PACKET_FORMAT (PACKET_FORMAT))
-      i_ad4858_lvds_interface (
-        .rst (adc_rst_s),
-        .clk (adc_clk_s),
-        .adc_enable (adc_enable),
-        .adc_crc_enable (adc_crc_enable),
-        .scki_p (scki_p),
-        .scki_n (scki_n),
-        .scko_p (scko_s_p),
-        .scko_n (scko_s_n),
-        .sdo_p (sdo_p),
-        .sdo_n (sdo_n),
-        .busy (busy),
-        .cnvs (cnvs),
-        .adc_or (adc_or),
-        .adc_crc_err (adc_crc_err),
-        .adc_ch0_id (adc_status_header[0]),
-        .adc_ch1_id (adc_status_header[1]),
-        .adc_ch2_id (adc_status_header[2]),
-        .adc_ch3_id (adc_status_header[3]),
-        .adc_ch4_id (adc_status_header[4]),
-        .adc_ch5_id (adc_status_header[5]),
-        .adc_ch6_id (adc_status_header[6]),
-        .adc_ch7_id (adc_status_header[7]),
-        .adc_data_0 (adc_data_0),
-        .adc_data_1 (adc_data_1),
-        .adc_data_2 (adc_data_2),
-        .adc_data_3 (adc_data_3),
-        .adc_data_4 (adc_data_4),
-        .adc_data_5 (adc_data_5),
-        .adc_data_6 (adc_data_6),
-        .adc_data_7 (adc_data_7),
-        .adc_valid (adc_valid));
     end else begin
       assign scki_p = 1'b0;
       assign scki_n = 1'b1;
