@@ -290,9 +290,6 @@ module axi_ltc235x #(
                 lane_1,
                 lane_0}),
         .busy (busy),
-        .cnvs (cnvs),
-        .adc_or (adc_or),
-        .adc_crc_err (adc_crc_err),
         .adc_ch0_id (adc_status_header[0]),
         .adc_ch1_id (adc_status_header[1]),
         .adc_ch2_id (adc_status_header[2]),
@@ -309,6 +306,14 @@ module axi_ltc235x #(
         .adc_data_5 (adc_data_5),
         .adc_data_6 (adc_data_6),
         .adc_data_7 (adc_data_7),
+        .adc_softspan_0 (adc_softspan_0),
+        .adc_softspan_1 (adc_softspan_1),
+        .adc_softspan_2 (adc_softspan_2),
+        .adc_softspan_3 (adc_softspan_3),
+        .adc_softspan_4 (adc_softspan_4),
+        .adc_softspan_5 (adc_softspan_5),
+        .adc_softspan_6 (adc_softspan_6),
+        .adc_softspan_7 (adc_softspan_7),
         .adc_valid (adc_valid));
    end
   endgenerate
