@@ -366,7 +366,11 @@ module axi_ltc235x #(
     .up_drp_rdata (32'd0),
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
-    // no support ADC custom read/write
+    .adc_custom_wr (),
+    .adc_write_req (),
+    .adc_custom_rd (32'h0),
+    .adc_read_valid (1'b0),
+    .adc_read_req (),
     .up_usr_chanmax_out (),
     .up_usr_chanmax_in (8),
     .up_adc_gpio_in (32'b0),
