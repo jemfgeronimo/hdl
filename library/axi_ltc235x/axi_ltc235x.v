@@ -119,15 +119,7 @@ module axi_ltc235x #(
   output      [31:0]      adc_data_4,
   output      [31:0]      adc_data_5,
   output      [31:0]      adc_data_6,
-  output      [31:0]      adc_data_7,
-  output      [ 2:0]      adc_softspan_0,
-  output      [ 2:0]      adc_softspan_1,
-  output      [ 2:0]      adc_softspan_2,
-  output      [ 2:0]      adc_softspan_3,
-  output      [ 2:0]      adc_softspan_4,
-  output      [ 2:0]      adc_softspan_5,
-  output      [ 2:0]      adc_softspan_6,
-  output      [ 2:0]      adc_softspan_7,
+  output      [31:0]      adc_data_7
 );
 
   // localparam
