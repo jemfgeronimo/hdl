@@ -483,7 +483,7 @@ module axi_ltc235x_cmos #(
     end
   end
 
-	// db_o
+	////////////////////////////////////////////////////////////////////////// ADC SDI 
   // every negedge of scki, update index of db_o
   always @(posedge clk) begin
     if (start_transfer_s || rst) begin
