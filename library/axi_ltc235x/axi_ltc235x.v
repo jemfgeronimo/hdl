@@ -147,7 +147,6 @@ module axi_ltc235x #(
   reg                     up_wack = 1'b0;
   reg                     up_rack = 1'b0;
   reg     [31:0]          up_rdata = 32'b0;
-  reg                     up_status_or = 1'b0;
 
   // internal signals
 
@@ -160,7 +159,6 @@ module axi_ltc235x #(
 
   wire                    adc_clk_s;
 
-  wire    [ 7:0]          up_adc_or_s;
   wire    [13:0]          up_addr_s;
   wire    [31:0]          up_wdata_s;
   wire    [31:0]          up_rdata_s[0:8];
@@ -179,7 +177,6 @@ module axi_ltc235x #(
   wire    [ 7:0]          adc_enable;
   wire    [ 2:0]          adc_status_header[0:7];
   wire    [ 7:0]          adc_crc_err;
-  wire    [ 7:0]          adc_or;
 
   // defaults
 
@@ -201,12 +198,10 @@ module axi_ltc235x #(
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_status_or <= 'd0;
       up_wack <= 'd0;
       up_rack <= 'd0;
       up_rdata <= 'd0;
     end else begin
-      up_status_or <= | up_adc_or_s;
       up_wack <= |up_wack_s;
       up_rack <= |up_rack_s;
       up_rdata <= up_rdata_s[0] |
@@ -304,12 +299,12 @@ module axi_ltc235x #(
         .adc_data_sel (),
         .adc_pn_err (1'b0),
         .adc_pn_oos (1'b0),
-        .adc_or (adc_or[i]),
+        .adc_or (1'b0),
         .adc_status_header({5'd0, adc_status_header[i]}),
         .adc_crc_err(adc_crc_err[i]),
         .up_adc_pn_err (),
         .up_adc_pn_oos (),
-        .up_adc_or (up_adc_or_s[i]),
+        .up_adc_or (),
         .up_usr_datatype_be (),
         .up_usr_datatype_signed (),
         .up_usr_datatype_shift (),
@@ -370,7 +365,7 @@ module axi_ltc235x #(
     .up_adc_ce (),
     .up_status_pn_err (1'b0),
     .up_status_pn_oos (1'b0),
-    .up_status_or (up_status_or),
+    .up_status_or (1'b0),
     .up_adc_r1_mode(),
     .up_drp_sel (),
     .up_drp_wr (),
