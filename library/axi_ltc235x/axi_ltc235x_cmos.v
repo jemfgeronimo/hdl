@@ -74,15 +74,6 @@ module axi_ltc235x_cmos #(
   output      [31:0]      adc_data_6,
   output      [31:0]      adc_data_7,
 
-  output      [ 2:0]      adc_softspan_0,
-  output      [ 2:0]      adc_softspan_1,
-  output      [ 2:0]      adc_softspan_2,
-  output      [ 2:0]      adc_softspan_3,
-  output      [ 2:0]      adc_softspan_4,
-  output      [ 2:0]      adc_softspan_5,
-  output      [ 2:0]      adc_softspan_6,
-  output      [ 2:0]      adc_softspan_7,
-
   output reg              adc_valid
 );
 
@@ -159,10 +150,9 @@ module axi_ltc235x_cmos #(
 
   wire                acquire_data;
 
-  wire        [31:0]  adc_data_s[7:0];
-  wire        [ 2:0]  adc_ch_id_s[7:0];
-  wire        [ 2:0]  adc_softspan_s[7:0];
-
+  wire        [31:0]  adc_data_s [7:0];
+  wire        [ 2:0]  adc_ch_id_s [7:0];
+  wire        [ 2:0]  adc_softspan [7:0];
 
   ////////////////////////////////////////////////////// SCKI
 
@@ -430,7 +420,7 @@ module axi_ltc235x_cmos #(
     for (i=0; i < 8; i=i+1) begin: format
       assign adc_data_s[i] = {{14{0}}, adc_data_store[i][23:6]};  // TODO: find out if data is needed to be formatted or not yet
       assign adc_ch_id_s[i] = adc_data_store[i][5:3];
-      assign adc_softspan_s[i] = adc_data_store[i][2:0];
+      assign adc_softspan[i] = adc_data_store[i][2:0];
     end
   endgenerate
 
@@ -452,15 +442,6 @@ module axi_ltc235x_cmos #(
   assign adc_ch5_id = adc_ch_id_s[5];
   assign adc_ch6_id = adc_ch_id_s[6];
   assign adc_ch7_id = adc_ch_id_s[7];
-
-  assign adc_softspan_0 = adc_softspan_s[0];
-  assign adc_softspan_1 = adc_softspan_s[1];
-  assign adc_softspan_2 = adc_softspan_s[2];
-  assign adc_softspan_3 = adc_softspan_s[3];
-  assign adc_softspan_4 = adc_softspan_s[4];
-  assign adc_softspan_5 = adc_softspan_s[5];
-  assign adc_softspan_6 = adc_softspan_s[6];
-  assign adc_softspan_7 = adc_softspan_s[7];
 
 //////////////////////////////////////////////////////////// VALID SIGNAL
 
