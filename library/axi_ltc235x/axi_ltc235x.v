@@ -181,8 +181,6 @@ module axi_ltc235x #(
   wire    [ 7:0]          adc_crc_err;
   wire    [ 7:0]          adc_or;
 
-  wire                    adc_crc_enable;
-
   // defaults
 
   assign up_clk = s_axi_aclk;
@@ -243,7 +241,6 @@ module axi_ltc235x #(
         .rst (adc_rst_s),
         .clk (adc_clk_s),
         .adc_enable (adc_enable),
-        .adc_crc_enable (adc_crc_enable),
         .scki (scki),
         .scko (scko),
         .db_i ({lane_7,
@@ -366,7 +363,7 @@ module axi_ltc235x #(
     .adc_symb_op(),
     .adc_symb_8_16b(),
     .adc_num_lanes(),
-    .adc_crc_enable(adc_crc_enable),
+    .adc_crc_enable(),
     .up_pps_rcounter (32'b0),
     .up_pps_status (1'b0),
     .up_pps_irq_mask (),
