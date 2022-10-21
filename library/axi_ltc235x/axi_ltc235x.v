@@ -176,7 +176,6 @@ module axi_ltc235x #(
 
   wire    [ 7:0]          adc_enable;
   wire    [ 2:0]          adc_status_header[0:7];
-  wire    [ 7:0]          adc_crc_err;
 
   // defaults
 
@@ -300,6 +299,7 @@ module axi_ltc235x #(
         .adc_pn_err (1'b0),
         .adc_pn_oos (1'b0),
         .adc_or (1'b0),
+        .adc_read_data (32'h0),
         .adc_status_header({5'd0, adc_status_header[i]}),
         .adc_crc_err(adc_crc_err[i]),
         .up_adc_pn_err (),
