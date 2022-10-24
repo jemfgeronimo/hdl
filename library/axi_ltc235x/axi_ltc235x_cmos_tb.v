@@ -160,14 +160,14 @@ module axi_ltc235x_cmos_tb ();
     #100
     action <= 1;
     // 18-bit data
-    rx_db_i[0] <= 'h28000; rx_db_i_ch[0] = 0; rx_db_i_softspan[0] = 7;
-    rx_db_i[1] <= 'h28001; rx_db_i_ch[1] = 1; rx_db_i_softspan[1] = 0;
-    rx_db_i[2] <= 'h28002; rx_db_i_ch[2] = 2; rx_db_i_softspan[2] = 6;
-    rx_db_i[3] <= 'h28003; rx_db_i_ch[3] = 3; rx_db_i_softspan[3] = 1;
-    rx_db_i[4] <= 'h28004; rx_db_i_ch[4] = 4; rx_db_i_softspan[4] = 5;
-    rx_db_i[5] <= 'h28005; rx_db_i_ch[5] = 5; rx_db_i_softspan[5] = 2;
-    rx_db_i[6] <= 'h28006; rx_db_i_ch[6] = 6; rx_db_i_softspan[6] = 4;
-    rx_db_i[7] <= 'h28007; rx_db_i_ch[7] = 7; rx_db_i_softspan[7] = 3;
+    rx_db_i[0] <= 'h28000; rx_db_i_ch[0] = 0; rx_db_i_softspan[0] = 7;  // 2's complement
+    rx_db_i[1] <= 'h28001; rx_db_i_ch[1] = 1; rx_db_i_softspan[1] = 0;  // 0
+    rx_db_i[2] <= 'h28002; rx_db_i_ch[2] = 2; rx_db_i_softspan[2] = 6;  // 2's complement
+    rx_db_i[3] <= 'h28003; rx_db_i_ch[3] = 3; rx_db_i_softspan[3] = 1;  // straight binary
+    rx_db_i[4] <= 'h28004; rx_db_i_ch[4] = 4; rx_db_i_softspan[4] = 5;  // straight binary
+    rx_db_i[5] <= 'h28005; rx_db_i_ch[5] = 5; rx_db_i_softspan[5] = 2;  // 2's complement
+    rx_db_i[6] <= 'h28006; rx_db_i_ch[6] = 6; rx_db_i_softspan[6] = 4;  // straight binary
+    rx_db_i[7] <= 'h28007; rx_db_i_ch[7] = 7; rx_db_i_softspan[7] = 3;  // 2's complement
     #4500
     action <= 0;  softspan_counter <= 'd0;
     #100
