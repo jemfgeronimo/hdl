@@ -65,6 +65,9 @@ module axi_ltc235x #(
   input                   scko_n,
   input                   busy,
   output                  lvds_cmos_n,
+  output                  sdi,
+  output                  sdi_p,
+  output                  sdi_n,
   input                   sdo_p,
   input                   sdo_n,
   input                   lane_0,
@@ -75,6 +78,7 @@ module axi_ltc235x #(
   input                   lane_5,
   input                   lane_6,
   input                   lane_7,
+  
 
   // AXI Slave Memory Map
 
@@ -220,14 +224,16 @@ module axi_ltc235x #(
       assign scki_p = 1'b0;
       assign scki_n = 1'b1;
       axi_ltc235x_cmos #(
-        .OVERSMP_ENABLE (OVERSMP_ENABLE),
-        .PACKET_FORMAT (PACKET_FORMAT),
-        .ACTIVE_LANE (ACTIVE_LANES))
+        .NUM_CHANNELS (NUM_CHANNELS),
+        .DATA_WIDTH (DATA_WIDTH),
+        .ACTIVE_LANE (ACTIVE_LANES),
+        .SOFTSPAN_NEXT (SOFTSPAN_NEXT))
       i_ltc235x_cmos (
         .rst (adc_rst_s),
         .clk (adc_clk_s),
         .adc_enable (adc_enable),
         .scki (scki),
+        .db_o (sdi),
         .scko (scko),
         .db_i ({lane_7,
                 lane_6,
