@@ -67,14 +67,6 @@ module axi_ltc235x_tb ();
 
   // FIFO interface
 
-  wire      [ 2:0]      adc_ch0_id;
-  wire      [ 2:0]      adc_ch1_id;
-  wire      [ 2:0]      adc_ch2_id;
-  wire      [ 2:0]      adc_ch3_id;
-  wire      [ 2:0]      adc_ch4_id;
-  wire      [ 2:0]      adc_ch5_id;
-  wire      [ 2:0]      adc_ch6_id;
-  wire      [ 2:0]      adc_ch7_id;
   wire      [31:0]      adc_data_0;
   wire      [31:0]      adc_data_1;
   wire      [31:0]      adc_data_2;
@@ -142,13 +134,13 @@ module axi_ltc235x_tb ();
     .lvds_cmos_n (lvds_cmos_n),
     .sdi (db_o),
     .lane_0 (db_i_shift[0]),
-    .lane_0 (db_i_shift[1]),
-    .lane_0 (db_i_shift[2]),
-    .lane_0 (db_i_shift[3]),
-    .lane_0 (db_i_shift[4]),
-    .lane_0 (db_i_shift[5]),
-    .lane_0 (db_i_shift[6]),
-    .lane_0 (db_i_shift[7]),
+    .lane_1 (db_i_shift[1]),
+    .lane_2 (db_i_shift[2]),
+    .lane_3 (db_i_shift[3]),
+    .lane_4 (db_i_shift[4]),
+    .lane_5 (db_i_shift[5]),
+    .lane_6 (db_i_shift[6]),
+    .lane_7 (db_i_shift[7]),
     .adc_valid (adc_valid),
     .adc_data_0 (adc_data_0),
     .adc_data_1 (adc_data_1),
@@ -159,7 +151,7 @@ module axi_ltc235x_tb ();
     .adc_data_6 (adc_data_6),
     .adc_data_7 (adc_data_7),
 
-    .s_axi_clk      (clk),
+    .s_axi_aclk      (clk),
     .s_axi_aresetn  (resetn),
     .s_axi_awvalid  ('d0),
     .s_axi_awaddr   ('d0),
