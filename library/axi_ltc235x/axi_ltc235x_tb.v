@@ -237,7 +237,7 @@ module axi_ltc235x_tb ();
 
       // update rx_db_i for next conversion
       // update rx_db_i_softspan for next conversion
-      if (adc_valid && adc_data_0 == rx_db_i[0]) begin
+      if (adc_valid) begin
         rx_db_i[0] <= rx_db_i[0] + 1;
         rx_db_i[1] <= rx_db_i[1] + 1;
         rx_db_i[2] <= rx_db_i[2] + 1;
