@@ -260,14 +260,6 @@ module axi_ltc235x #(
         .adc_data_5 (adc_data_5),
         .adc_data_6 (adc_data_6),
         .adc_data_7 (adc_data_7),
-        .adc_softspan_0 (adc_softspan_0),
-        .adc_softspan_1 (adc_softspan_1),
-        .adc_softspan_2 (adc_softspan_2),
-        .adc_softspan_3 (adc_softspan_3),
-        .adc_softspan_4 (adc_softspan_4),
-        .adc_softspan_5 (adc_softspan_5),
-        .adc_softspan_6 (adc_softspan_6),
-        .adc_softspan_7 (adc_softspan_7),
         .adc_valid (adc_valid));
    end
   endgenerate
