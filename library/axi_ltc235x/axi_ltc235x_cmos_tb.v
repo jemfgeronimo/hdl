@@ -70,14 +70,6 @@ module axi_ltc235x_cmos_tb ();
   wire      [31:0]      adc_data_5;
   wire      [31:0]      adc_data_6;
   wire      [31:0]      adc_data_7;
-  wire      [ 2:0]      adc_softspan_0;
-  wire      [ 2:0]      adc_softspan_1;
-  wire      [ 2:0]      adc_softspan_2;
-  wire      [ 2:0]      adc_softspan_3;
-  wire      [ 2:0]      adc_softspan_4;
-  wire      [ 2:0]      adc_softspan_5;
-  wire      [ 2:0]      adc_softspan_6;
-  wire      [ 2:0]      adc_softspan_7;
   wire                  adc_valid;
 
 	// other registers
