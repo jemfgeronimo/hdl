@@ -136,26 +136,20 @@ module axi_ltc235x_tb ();
     .EXTERNAL_CLK (EXTERNAL_CLK)
   ) i_ltc235x (
     .external_clk (external_clk)
-
-    .rst (!resetn),
-    .clk (clk),
-    .adc_enable (adc_enable),
-
     .scki (scki),
-    .db_o (db_o),
     .scko (scko),
-    .db_i (db_i_shift),
     .busy (rx_busy),
-
-    .adc_ch0_id (adc_ch0_id),
-    .adc_ch1_id (adc_ch1_id),
-    .adc_ch2_id (adc_ch2_id),
-    .adc_ch3_id (adc_ch3_id),
-    .adc_ch4_id (adc_ch4_id),
-    .adc_ch5_id (adc_ch5_id),
-    .adc_ch6_id (adc_ch6_id),
-    .adc_ch7_id (adc_ch7_id),
-
+    .lvds_cmos_n (lvds_cmos_n),
+    .sdi (db_o),
+    .lane_0 (db_i_shift[0]),
+    .lane_0 (db_i_shift[1]),
+    .lane_0 (db_i_shift[2]),
+    .lane_0 (db_i_shift[3]),
+    .lane_0 (db_i_shift[4]),
+    .lane_0 (db_i_shift[5]),
+    .lane_0 (db_i_shift[6]),
+    .lane_0 (db_i_shift[7]),
+    .adc_valid (adc_valid),
     .adc_data_0 (adc_data_0),
     .adc_data_1 (adc_data_1),
     .adc_data_2 (adc_data_2),
@@ -165,7 +159,27 @@ module axi_ltc235x_tb ();
     .adc_data_6 (adc_data_6),
     .adc_data_7 (adc_data_7),
 
-    .adc_valid (adc_valid)
+    .s_axi_clk      (clk),
+    .s_axi_aresetn  (resetn),
+    .s_axi_awvalid  ('d0),
+    .s_axi_awaddr   ('d0),
+    .s_axi_awprot   ('d0),
+    .s_axi_awready  (   ),
+    .s_axi_wvalid   ('d0),
+    .s_axi_wdata    ('d0),
+    .s_axi_wstrb    ('d0),
+    .s_axi_wready   (   ),
+    .s_axi_bvalid   (   ),
+    .s_axi_bresp    (   ),
+    .s_axi_bready   ('d0),
+    .s_axi_arvalid  ('d0),
+    .s_axi_araddr   ('d0),
+    .s_axi_arprot   ('d0),
+    .s_axi_arready  (   ),
+    .s_axi_rvalid   (   ),
+    .s_axi_rresp    (   ),
+    .s_axi_rdata    (   ),
+    .s_axi_rready   ('d0)
   );
 
   always #1 clk = ~clk;
