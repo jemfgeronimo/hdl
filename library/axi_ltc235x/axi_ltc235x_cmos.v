@@ -485,6 +485,7 @@ module axi_ltc235x_cmos #(
 
 	////////////////////////////////////////////////////////////////////////// ADC SDI 
   // every negedge of scki, update index of db_o
+  // TODO: hold db_o_index when db_o is dont care
   always @(posedge clk) begin
     if (start_transfer_s || rst) begin
       db_o_index <= 'd23;
