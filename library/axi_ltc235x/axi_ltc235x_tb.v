@@ -130,12 +130,12 @@ module axi_ltc235x_tb ();
     .LANE_5_ENABLE (LANE_5_ENABLE),
     .LANE_6_ENABLE (LANE_6_ENABLE),
     .LANE_7_ENABLE (LANE_7_ENABLE),
-    .NUM_CHANNELS (NUM_CHANNELS)
-    .DATA_WIDTH (DATA_WIDTH)
-    .SOFTSPAN_NEXT (SOFTSPAN_NEXT)
+    .NUM_CHANNELS (NUM_CHANNELS),
+    .DATA_WIDTH (DATA_WIDTH),
+    .SOFTSPAN_NEXT (SOFTSPAN_NEXT),
     .EXTERNAL_CLK (EXTERNAL_CLK)
   ) i_ltc235x (
-    .external_clk (external_clk)
+    .external_clk (external_clk),
     .scki (scki),
     .scko (scko),
     .busy (rx_busy),
