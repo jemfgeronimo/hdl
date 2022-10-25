@@ -170,7 +170,7 @@ module axi_ltc235x_cmos_tb ();
 
   // {18-bit data, channel id, softspan}
   generate
-    for (i = 0; i < 8; i = i + 1) begin
+    for (i = 0; i < 8; i = i + 1) begin: rx_db_i_24_gen
       assign rx_db_i_24[i] = {rx_db_i[i][17:0], rx_db_i_ch[i], rx_db_i_softspan[i]};
     end
   endgenerate
@@ -300,7 +300,7 @@ module axi_ltc235x_cmos_tb ();
   end
 
   generate
-    for (i = 0; i < 8; i = i + 1) begin
+    for (i = 0; i < 8; i = i + 1) begin: softspan_next_gen
       assign softspan_next_s[i] = softspan_next[(2 + (i*3)) : (i*3)];
     end
   endgenerate
