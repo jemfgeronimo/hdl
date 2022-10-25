@@ -29,7 +29,5 @@ adi_ip_properties axi_ltc235x
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ltc235x} [ipx::current_core]
 
-set cc [ipx::current_core]
-
 ipx::save_core [ipx::current_core]
 
