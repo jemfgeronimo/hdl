@@ -38,8 +38,8 @@
 module axi_ltc235x_cmos_tb ();
   parameter NUM_CHANNELS = 8;	// 8 for 2358, 4 for 2357, 2 for 2353
   parameter DATA_WIDTH = 18;	// 18 or 16
-  parameter ACTIVE_LANE = 8'b0000_0001; // TODO: make this an input signal
-  parameter SOFTSPAN_NEXT = 24'hf0_f0f0;
+  parameter ACTIVE_LANE = 8'b0000_0001;
+  parameter SOFTSPAN_NEXT = 24'hf0_f0f0; // TODO: make this an input signal
 
   reg                   resetn = 0;
   reg                   clk = 0;
