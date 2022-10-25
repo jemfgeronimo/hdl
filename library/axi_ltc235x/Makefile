@@ -7,6 +7,14 @@
 LIBRARY_NAME := axi_ltc235x
 
 GENERIC_DEPS += ${ADI_HDL_DIR}/library/common/up_axi.v
+GENERIC_DEPS += ${ADI_HDL_DIR}/library/common/up_adc_common.v
+GENERIC_DEPS += ${ADI_HDL_DIR}/library/common/ad_rst.v
+GENERIC_DEPS += ${ADI_HDL_DIR}/library/common/up_xfer_cntrl.v
+GENERIC_DEPS += ${ADI_HDL_DIR}/library/common/up_xfer_status.v
+GENERIC_DEPS += ${ADI_HDL_DIR}/library/common/up_clock_mon.v
+GENERIC_DEPS += ${ADI_HDL_DIR}/library/common/up_adc_channel.v
+GENERIC_DEPS += axi_ltc235x_cmos_tb.v
+GENERIC_DEPS += axi_ltc235x_tb.v
 GENERIC_DEPS += axi_ltc235x.v
 GENERIC_DEPS += axi_ltc235x_cmos.v
 
