@@ -1,11 +1,6 @@
 # ip
 
-if [info exists ::env(ADI_HDL_DIR)] {
-  set ADI_HDL_DIR $::env(ADI_HDL_DIR)
-  source $ADI_HDL_DIR/scripts/adi_env.tcl
-} else {
-  source ../../../scripts/adi_env.tcl
-}
+source ../../scripts/adi_env.tcl
 
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
