@@ -6,8 +6,8 @@ package require quartus::device
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
-adi_ip_create axi_ltc235x {AXI LTC235x Interface}
-adi_ip_files axi_ltc235x [list \
+ad_ip_create axi_ltc235x {AXI LTC235x Interface}
+ad_ip_files axi_ltc235x [list \
     $ad_hdl_dir/library/common/up_axi.v \
     $ad_hdl_dir/library/common/up_adc_common.v \
     $ad_hdl_dir/library/common/ad_rst.v \
