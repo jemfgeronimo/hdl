@@ -38,7 +38,7 @@
 module axi_ltc235x #(
 
   parameter       ID = 0,
-  parameter       FPGA_TECHNOLOGY = 0,
+  parameter       FPGA_TECHNOLOGY = 100,
   parameter       FPGA_FAMILY = 0,
   parameter       SPEED_GRADE = 0,
   parameter       DEV_PACKAGE = 0,
