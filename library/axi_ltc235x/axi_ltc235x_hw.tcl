@@ -4,9 +4,10 @@ package require qsys 14.0
 package require quartus::device
 
 source ../../scripts/adi_env.tcl
-source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
+source ../scripts/adi_ip_intel.tcl
 
 ad_ip_create axi_ltc235x {AXI LTC235x Interface}
+set_module_property VALIDATION_CALLBACK info_param_validate
 ad_ip_files axi_ltc235x [list \
     $ad_hdl_dir/library/common/up_axi.v \
     $ad_hdl_dir/library/common/up_adc_common.v \
