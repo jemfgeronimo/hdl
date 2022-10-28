@@ -104,32 +104,32 @@ module axi_ltc235x_cmos #(
   reg         [BW:0]  adc_data_init[7:0];
   reg         [BW:0]  adc_data_store[7:0];
 
-  reg         [ 2:0]  lane_0_data = 'd0;
-  reg         [ 2:0]  lane_1_data = 'd0;
-  reg         [ 2:0]  lane_2_data = 'd0;
-  reg         [ 2:0]  lane_3_data = 'd0;
-  reg         [ 2:0]  lane_4_data = 'd0;
-  reg         [ 2:0]  lane_5_data = 'd0;
-  reg         [ 2:0]  lane_6_data = 'd0;
-  reg         [ 2:0]  lane_7_data = 'd0;
+  reg         [ 2:0]  lane_0_ch = 'd0;
+  reg         [ 2:0]  lane_1_ch = 'd0;
+  reg         [ 2:0]  lane_2_ch = 'd0;
+  reg         [ 2:0]  lane_3_ch = 'd0;
+  reg         [ 2:0]  lane_4_ch = 'd0;
+  reg         [ 2:0]  lane_5_ch = 'd0;
+  reg         [ 2:0]  lane_6_ch = 'd0;
+  reg         [ 2:0]  lane_7_ch = 'd0;
 
-  reg         [ 3:0]  adc_ch0_shift;
-  reg         [ 3:0]  adc_ch1_shift;
-  reg         [ 3:0]  adc_ch2_shift;
-  reg         [ 3:0]  adc_ch3_shift;
-  reg         [ 3:0]  adc_ch4_shift;
-  reg         [ 3:0]  adc_ch5_shift;
-  reg         [ 3:0]  adc_ch6_shift;
-  reg         [ 3:0]  adc_ch7_shift;
+  reg         [ 3:0]  adc_lane0_shift;
+  reg         [ 3:0]  adc_lane1_shift;
+  reg         [ 3:0]  adc_lane2_shift;
+  reg         [ 3:0]  adc_lane3_shift;
+  reg         [ 3:0]  adc_lane4_shift;
+  reg         [ 3:0]  adc_lane5_shift;
+  reg         [ 3:0]  adc_lane6_shift;
+  reg         [ 3:0]  adc_lane7_shift;
 
-  reg         [ 3:0]  adc_ch0_shift_d;
-  reg         [ 3:0]  adc_ch1_shift_d;
-  reg         [ 3:0]  adc_ch2_shift_d;
-  reg         [ 3:0]  adc_ch3_shift_d;
-  reg         [ 3:0]  adc_ch4_shift_d;
-  reg         [ 3:0]  adc_ch5_shift_d;
-  reg         [ 3:0]  adc_ch6_shift_d;
-  reg         [ 3:0]  adc_ch7_shift_d;
+  reg         [ 3:0]  adc_lane0_shift_d;
+  reg         [ 3:0]  adc_lane1_shift_d;
+  reg         [ 3:0]  adc_lane2_shift_d;
+  reg         [ 3:0]  adc_lane3_shift_d;
+  reg         [ 3:0]  adc_lane4_shift_d;
+  reg         [ 3:0]  adc_lane5_shift_d;
+  reg         [ 3:0]  adc_lane6_shift_d;
+  reg         [ 3:0]  adc_lane7_shift_d;
 
   reg                 adc_valid_init;
   reg                 adc_valid_init_d;
@@ -146,7 +146,6 @@ module axi_ltc235x_cmos #(
   wire                start_transfer_s;
 
   wire                scki_cnt_rst;
-  wire                scko_i;
 
   wire                acquire_data;
 
@@ -195,7 +194,6 @@ module axi_ltc235x_cmos #(
 
   assign scki_cnt_rst = (scki_counter == DW) ? 1'b1 : 1'b0;
   assign scki = scki_i | ~acquire_data;
-  assign scko_i = scko & ~busy_m1;
 
   /////////////////////////////////////////////////////////// DATA FLOW
 
@@ -231,15 +229,18 @@ module axi_ltc235x_cmos #(
   */
 
   // capture data per lane in rx buffers adc_lane_X on every edge of scko
-  always @(scko_i) begin
-    adc_lane_0 <= {adc_lane_0[BW-1:0], db_i[0]};
-    adc_lane_1 <= {adc_lane_1[BW-1:0], db_i[1]};
-    adc_lane_2 <= {adc_lane_2[BW-1:0], db_i[2]};
-    adc_lane_3 <= {adc_lane_3[BW-1:0], db_i[3]};
-    adc_lane_4 <= {adc_lane_4[BW-1:0], db_i[4]};
-    adc_lane_5 <= {adc_lane_5[BW-1:0], db_i[5]};
-    adc_lane_6 <= {adc_lane_6[BW-1:0], db_i[6]};
-    adc_lane_7 <= {adc_lane_7[BW-1:0], db_i[7]};
+  // ignore when busy forced scko to 0
+  always @(scko) begin
+    if (scki == scki_d) begin
+      adc_lane_0 <= {adc_lane_0[BW-1:0], db_i[0]};
+      adc_lane_1 <= {adc_lane_1[BW-1:0], db_i[1]};
+      adc_lane_2 <= {adc_lane_2[BW-1:0], db_i[2]};
+      adc_lane_3 <= {adc_lane_3[BW-1:0], db_i[3]};
+      adc_lane_4 <= {adc_lane_4[BW-1:0], db_i[4]};
+      adc_lane_5 <= {adc_lane_5[BW-1:0], db_i[5]};
+      adc_lane_6 <= {adc_lane_6[BW-1:0], db_i[6]};
+      adc_lane_7 <= {adc_lane_7[BW-1:0], db_i[7]};
+    end
   end
 
   // store the data from the rx buffers when all bits are received
@@ -267,15 +268,6 @@ module axi_ltc235x_cmos #(
         adc_data_init[5] <= adc_lane_5;
         adc_data_init[6] <= adc_lane_6;
         adc_data_init[7] <= adc_lane_7;
-      end else begin
-        adc_data_init[0] <= adc_data_init[0];
-        adc_data_init[1] <= adc_data_init[1];
-        adc_data_init[2] <= adc_data_init[2];
-        adc_data_init[3] <= adc_data_init[3];
-        adc_data_init[4] <= adc_data_init[4];
-        adc_data_init[5] <= adc_data_init[5];
-        adc_data_init[6] <= adc_data_init[6];
-        adc_data_init[7] <= adc_data_init[7];
       end
     end
   end
@@ -284,42 +276,32 @@ module axi_ltc235x_cmos #(
   // ch_data_lock[i] - locks ch i, means dont acquire data if all ch's are lock while acquire_data = 0
   always @(posedge clk) begin
     if (start_transfer_s) begin
-      lane_0_data <= 3'd0;
-      lane_1_data <= 3'd1;
-      lane_2_data <= 3'd2;
-      lane_3_data <= 3'd3;
-      lane_4_data <= 3'd4;
-      lane_5_data <= 3'd5;
-      lane_6_data <= 3'd6;
-      lane_7_data <= 3'd7;
+      lane_0_ch <= 3'd0;
+      lane_1_ch <= 3'd1;
+      lane_2_ch <= 3'd2;
+      lane_3_ch <= 3'd3;
+      lane_4_ch <= 3'd4;
+      lane_5_ch <= 3'd5;
+      lane_6_ch <= 3'd6;
+      lane_7_ch <= 3'd7;
       ch_data_lock <= 8'd0;
     end else if (acquire_data == 1'b1 && (scki_cnt_rst & (~scki_d & scki_i))) begin
-      lane_0_data <= lane_0_data + 1;
-      lane_1_data <= lane_1_data + 1;
-      lane_2_data <= lane_2_data + 1;
-      lane_3_data <= lane_3_data + 1;
-      lane_4_data <= lane_4_data + 1;
-      lane_5_data <= lane_5_data + 1;
-      lane_6_data <= lane_6_data + 1;
-      lane_7_data <= lane_7_data + 1;
-      ch_data_lock[lane_0_data] <= ACTIVE_LANE[0] ? 1'b1 : ch_data_lock[lane_0_data];
-      ch_data_lock[lane_1_data] <= ACTIVE_LANE[1] ? 1'b1 : ch_data_lock[lane_1_data];
-      ch_data_lock[lane_2_data] <= ACTIVE_LANE[2] ? 1'b1 : ch_data_lock[lane_2_data];
-      ch_data_lock[lane_3_data] <= ACTIVE_LANE[3] ? 1'b1 : ch_data_lock[lane_3_data];
-      ch_data_lock[lane_4_data] <= ACTIVE_LANE[4] ? 1'b1 : ch_data_lock[lane_4_data];
-      ch_data_lock[lane_5_data] <= ACTIVE_LANE[5] ? 1'b1 : ch_data_lock[lane_5_data];
-      ch_data_lock[lane_6_data] <= ACTIVE_LANE[6] ? 1'b1 : ch_data_lock[lane_6_data];
-      ch_data_lock[lane_7_data] <= ACTIVE_LANE[7] ? 1'b1 : ch_data_lock[lane_7_data];
-    end else begin
-      lane_0_data <= lane_0_data;
-      lane_1_data <= lane_1_data;
-      lane_2_data <= lane_2_data;
-      lane_3_data <= lane_3_data;
-      lane_4_data <= lane_4_data;
-      lane_5_data <= lane_5_data;
-      lane_6_data <= lane_6_data;
-      lane_7_data <= lane_7_data;
-      ch_data_lock <= ch_data_lock;
+      lane_0_ch <= lane_0_ch + 1;
+      lane_1_ch <= lane_1_ch + 1;
+      lane_2_ch <= lane_2_ch + 1;
+      lane_3_ch <= lane_3_ch + 1;
+      lane_4_ch <= lane_4_ch + 1;
+      lane_5_ch <= lane_5_ch + 1;
+      lane_6_ch <= lane_6_ch + 1;
+      lane_7_ch <= lane_7_ch + 1;
+      ch_data_lock[lane_0_ch] <= ACTIVE_LANE[0] ? 1'b1 : ch_data_lock[lane_0_ch];
+      ch_data_lock[lane_1_ch] <= ACTIVE_LANE[1] ? 1'b1 : ch_data_lock[lane_1_ch];
+      ch_data_lock[lane_2_ch] <= ACTIVE_LANE[2] ? 1'b1 : ch_data_lock[lane_2_ch];
+      ch_data_lock[lane_3_ch] <= ACTIVE_LANE[3] ? 1'b1 : ch_data_lock[lane_3_ch];
+      ch_data_lock[lane_4_ch] <= ACTIVE_LANE[4] ? 1'b1 : ch_data_lock[lane_4_ch];
+      ch_data_lock[lane_5_ch] <= ACTIVE_LANE[5] ? 1'b1 : ch_data_lock[lane_5_ch];
+      ch_data_lock[lane_6_ch] <= ACTIVE_LANE[6] ? 1'b1 : ch_data_lock[lane_6_ch];
+      ch_data_lock[lane_7_ch] <= ACTIVE_LANE[7] ? 1'b1 : ch_data_lock[lane_7_ch];
     end
   end
 
@@ -336,39 +318,39 @@ module axi_ltc235x_cmos #(
   // for datasyncing with valid signal
   always @(posedge clk) begin
     if (rst == 1'b1 || adc_valid == 1'b1) begin
-      adc_ch0_shift <= 4'd0;
-      adc_ch1_shift <= 4'd0;
-      adc_ch2_shift <= 4'd0;
-      adc_ch3_shift <= 4'd0;
-      adc_ch4_shift <= 4'd0;
-      adc_ch5_shift <= 4'd0;
-      adc_ch6_shift <= 4'd0;
-      adc_ch7_shift <= 4'd0;
-      adc_ch0_shift_d <= 4'd0;
-      adc_ch1_shift_d <= 4'd0;
-      adc_ch2_shift_d <= 4'd0;
-      adc_ch3_shift_d <= 4'd0;
-      adc_ch4_shift_d <= 4'd0;
-      adc_ch5_shift_d <= 4'd0;
-      adc_ch6_shift_d <= 4'd0;
-      adc_ch7_shift_d <= 4'd0;
+      adc_lane0_shift <= 4'd0;
+      adc_lane1_shift <= 4'd0;
+      adc_lane2_shift <= 4'd0;
+      adc_lane3_shift <= 4'd0;
+      adc_lane4_shift <= 4'd0;
+      adc_lane5_shift <= 4'd0;
+      adc_lane6_shift <= 4'd0;
+      adc_lane7_shift <= 4'd0;
+      adc_lane0_shift_d <= 4'd0;
+      adc_lane1_shift_d <= 4'd0;
+      adc_lane2_shift_d <= 4'd0;
+      adc_lane3_shift_d <= 4'd0;
+      adc_lane4_shift_d <= 4'd0;
+      adc_lane5_shift_d <= 4'd0;
+      adc_lane6_shift_d <= 4'd0;
+      adc_lane7_shift_d <= 4'd0;
     end else begin
-      adc_ch0_shift <= {ACTIVE_LANE[0],lane_0_data};
-      adc_ch1_shift <= {ACTIVE_LANE[1],lane_1_data};
-      adc_ch2_shift <= {ACTIVE_LANE[2],lane_2_data};
-      adc_ch3_shift <= {ACTIVE_LANE[3],lane_3_data};
-      adc_ch4_shift <= {ACTIVE_LANE[4],lane_4_data};
-      adc_ch5_shift <= {ACTIVE_LANE[5],lane_5_data};
-      adc_ch6_shift <= {ACTIVE_LANE[6],lane_6_data};
-      adc_ch7_shift <= {ACTIVE_LANE[7],lane_7_data};
-      adc_ch0_shift_d <= adc_ch0_shift;
-      adc_ch1_shift_d <= adc_ch1_shift;
-      adc_ch2_shift_d <= adc_ch2_shift;
-      adc_ch3_shift_d <= adc_ch3_shift;
-      adc_ch4_shift_d <= adc_ch4_shift;
-      adc_ch5_shift_d <= adc_ch5_shift;
-      adc_ch6_shift_d <= adc_ch6_shift;
-      adc_ch7_shift_d <= adc_ch7_shift;
+      adc_lane0_shift <= {ACTIVE_LANE[0], lane_0_ch};
+      adc_lane1_shift <= {ACTIVE_LANE[1], lane_1_ch};
+      adc_lane2_shift <= {ACTIVE_LANE[2], lane_2_ch};
+      adc_lane3_shift <= {ACTIVE_LANE[3], lane_3_ch};
+      adc_lane4_shift <= {ACTIVE_LANE[4], lane_4_ch};
+      adc_lane5_shift <= {ACTIVE_LANE[5], lane_5_ch};
+      adc_lane6_shift <= {ACTIVE_LANE[6], lane_6_ch};
+      adc_lane7_shift <= {ACTIVE_LANE[7], lane_7_ch};
+      adc_lane0_shift_d <= adc_lane0_shift;
+      adc_lane1_shift_d <= adc_lane1_shift;
+      adc_lane2_shift_d <= adc_lane2_shift;
+      adc_lane3_shift_d <= adc_lane3_shift;
+      adc_lane4_shift_d <= adc_lane4_shift;
+      adc_lane5_shift_d <= adc_lane5_shift;
+      adc_lane6_shift_d <= adc_lane6_shift;
+      adc_lane7_shift_d <= adc_lane7_shift;
     end
   end
 
@@ -386,29 +368,29 @@ module axi_ltc235x_cmos #(
       adc_data_store[7] <= 'd0;
     end else begin
       if (!adc_valid_init_d & adc_valid_init) begin
-        if (adc_ch0_shift_d[3] == 1'b1) begin
-          adc_data_store[adc_ch0_shift_d[2:0]] <= adc_data_init[0];
+        if (adc_lane0_shift_d[3] == 1'b1) begin
+          adc_data_store[adc_lane0_shift_d[2:0]] <= adc_data_init[0];
         end
-        if (adc_ch1_shift_d[3] == 1'b1) begin
-          adc_data_store[adc_ch1_shift_d[2:0]] <= adc_data_init[1];
+        if (adc_lane1_shift_d[3] == 1'b1) begin
+          adc_data_store[adc_lane1_shift_d[2:0]] <= adc_data_init[1];
         end
-        if (adc_ch2_shift_d[3] == 1'b1) begin
-          adc_data_store[adc_ch2_shift_d[2:0]] <= adc_data_init[2];
+        if (adc_lane2_shift_d[3] == 1'b1) begin
+          adc_data_store[adc_lane2_shift_d[2:0]] <= adc_data_init[2];
         end
-        if (adc_ch3_shift_d[3] == 1'b1) begin
-          adc_data_store[adc_ch3_shift_d[2:0]] <= adc_data_init[3];
+        if (adc_lane3_shift_d[3] == 1'b1) begin
+          adc_data_store[adc_lane3_shift_d[2:0]] <= adc_data_init[3];
         end
-        if (adc_ch4_shift_d[3] == 1'b1) begin
-          adc_data_store[adc_ch4_shift_d[2:0]] <= adc_data_init[4];
+        if (adc_lane4_shift_d[3] == 1'b1) begin
+          adc_data_store[adc_lane4_shift_d[2:0]] <= adc_data_init[4];
         end
-        if (adc_ch5_shift_d[3] == 1'b1) begin
-          adc_data_store[adc_ch5_shift_d[2:0]] <= adc_data_init[5];
+        if (adc_lane5_shift_d[3] == 1'b1) begin
+          adc_data_store[adc_lane5_shift_d[2:0]] <= adc_data_init[5];
         end
-        if (adc_ch6_shift_d[3] == 1'b1) begin
-          adc_data_store[adc_ch6_shift_d[2:0]] <= adc_data_init[6];
+        if (adc_lane6_shift_d[3] == 1'b1) begin
+          adc_data_store[adc_lane6_shift_d[2:0]] <= adc_data_init[6];
         end
-        if (adc_ch7_shift_d[3] == 1'b1) begin
-          adc_data_store[adc_ch7_shift_d[2:0]] <= adc_data_init[7];
+        if (adc_lane7_shift_d[3] == 1'b1) begin
+          adc_data_store[adc_lane7_shift_d[2:0]] <= adc_data_init[7];
         end
       end
     end
