@@ -258,14 +258,14 @@ module axi_ltc235x_cmos_tb ();
         db_i_index <= (db_i_index != 'd0) ? db_i_index - 1 : 23;
         ring_buffer_index <= (db_i_index == 'd0) ? ring_buffer_index +1 : (ring_buffer_index == 8) ? 0 : ring_buffer_index;
 
-        ch_index_lane_0 <= (0 + ring_buffer_index) == 8 ? 0 : (0 + ring_buffer_index) > 8 ? (0 + ring_buffer_index) -8 : 0 + ring_buffer_index;
-        ch_index_lane_1 <= (1 + ring_buffer_index) == 8 ? 0 : (1 + ring_buffer_index) > 8 ? (1 + ring_buffer_index) -8 : 1 + ring_buffer_index;
-        ch_index_lane_2 <= (2 + ring_buffer_index) == 8 ? 0 : (2 + ring_buffer_index) > 8 ? (2 + ring_buffer_index) -8 : 2 + ring_buffer_index;
-        ch_index_lane_3 <= (3 + ring_buffer_index) == 8 ? 0 : (3 + ring_buffer_index) > 8 ? (3 + ring_buffer_index) -8 : 3 + ring_buffer_index;
-        ch_index_lane_4 <= (4 + ring_buffer_index) == 8 ? 0 : (4 + ring_buffer_index) > 8 ? (4 + ring_buffer_index) -8 : 4 + ring_buffer_index;
-        ch_index_lane_5 <= (5 + ring_buffer_index) == 8 ? 0 : (5 + ring_buffer_index) > 8 ? (5 + ring_buffer_index) -8 : 5 + ring_buffer_index;
-        ch_index_lane_6 <= (6 + ring_buffer_index) == 8 ? 0 : (6 + ring_buffer_index) > 8 ? (6 + ring_buffer_index) -8 : 6 + ring_buffer_index;
-        ch_index_lane_7 <= (7 + ring_buffer_index) == 8 ? 0 : (7 + ring_buffer_index) > 8 ? (7 + ring_buffer_index) -8 : 7 + ring_buffer_index;
+        ch_index_lane_0 <= (0 + ring_buffer_index) < 8 ? (0 + ring_buffer_index) : (0 + ring_buffer_index) -8;
+        ch_index_lane_1 <= (1 + ring_buffer_index) < 8 ? (1 + ring_buffer_index) : (1 + ring_buffer_index) -8;
+        ch_index_lane_2 <= (2 + ring_buffer_index) < 8 ? (2 + ring_buffer_index) : (2 + ring_buffer_index) -8;
+        ch_index_lane_3 <= (3 + ring_buffer_index) < 8 ? (3 + ring_buffer_index) : (3 + ring_buffer_index) -8;
+        ch_index_lane_4 <= (4 + ring_buffer_index) < 8 ? (4 + ring_buffer_index) : (4 + ring_buffer_index) -8;
+        ch_index_lane_5 <= (5 + ring_buffer_index) < 8 ? (5 + ring_buffer_index) : (5 + ring_buffer_index) -8;
+        ch_index_lane_6 <= (6 + ring_buffer_index) < 8 ? (6 + ring_buffer_index) : (6 + ring_buffer_index) -8;
+        ch_index_lane_7 <= (7 + ring_buffer_index) < 8 ? (7 + ring_buffer_index) : (7 + ring_buffer_index) -8;
 
         db_i_shift[0] <= rx_db_i_24[ch_index_lane_0][db_i_index];
         db_i_shift[1] <= rx_db_i_24[ch_index_lane_1][db_i_index];
