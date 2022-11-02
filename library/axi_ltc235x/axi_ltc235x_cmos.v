@@ -192,7 +192,7 @@ module axi_ltc235x_cmos #(
     end
   end
 
-  assign scki_cnt_rst = (scki_counter == DW) ? 1'b1 : 1'b0;
+  assign scki_cnt_rst = (scki_counter == DW);
   assign scki = scki_i | ~acquire_data;
 
   /////////////////////////////////////////////////////////// DATA FLOW
