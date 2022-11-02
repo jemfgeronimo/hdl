@@ -50,7 +50,7 @@ module axi_ltc235x_tb ();
   parameter       LANE_7_ENABLE = 1;
   parameter       NUM_CHANNELS = 8;	            // 8 for 2358, 4 for 2357, 2 for 2353
   parameter       DATA_WIDTH = 18;	            // 18 or 16
-  parameter       SOFTSPAN_NEXT = 24'hf0_f0f0; // TODO: make this an input signal
+  parameter       SOFTSPAN_NEXT = 24'hff_ffff; // TODO: make this an input signal
   parameter       EXTERNAL_CLK = 0;
 
   // controller interface
