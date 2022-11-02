@@ -41,13 +41,13 @@ module axi_ltc235x_tb ();
 
   parameter       LVDS_CMOS_N = 0;
   parameter       LANE_0_ENABLE = 1;
-  parameter       LANE_1_ENABLE = 0;
-  parameter       LANE_2_ENABLE = 0;
-  parameter       LANE_3_ENABLE = 0;
-  parameter       LANE_4_ENABLE = 0;
-  parameter       LANE_5_ENABLE = 0;
-  parameter       LANE_6_ENABLE = 0;
-  parameter       LANE_7_ENABLE = 0;
+  parameter       LANE_1_ENABLE = 1;
+  parameter       LANE_2_ENABLE = 1;
+  parameter       LANE_3_ENABLE = 1;
+  parameter       LANE_4_ENABLE = 1;
+  parameter       LANE_5_ENABLE = 1;
+  parameter       LANE_6_ENABLE = 1;
+  parameter       LANE_7_ENABLE = 1;
   parameter       NUM_CHANNELS = 8;	            // 8 for 2358, 4 for 2357, 2 for 2353
   parameter       DATA_WIDTH = 18;	            // 18 or 16
   parameter       SOFTSPAN_NEXT = 24'hf0_f0f0; // TODO: make this an input signal
@@ -233,6 +233,7 @@ module axi_ltc235x_tb ();
         ch_index_lane_6 <= (6 + ring_buffer_index) < 8? 6 + ring_buffer_index : (6 + ring_buffer_index) -8;
         ch_index_lane_7 <= (7 + ring_buffer_index) < 8? 7 + ring_buffer_index : (7 + ring_buffer_index) -8;
 
+        /*
         db_i_shift[0] <= LANE_0_ENABLE == 1? rx_db_i_24[ch_index_lane_0][db_i_index] : 0;
         db_i_shift[1] <= LANE_1_ENABLE == 1? rx_db_i_24[ch_index_lane_1][db_i_index] : 0;
         db_i_shift[2] <= LANE_2_ENABLE == 1? rx_db_i_24[ch_index_lane_2][db_i_index] : 0;
@@ -241,6 +242,15 @@ module axi_ltc235x_tb ();
         db_i_shift[5] <= LANE_5_ENABLE == 1? rx_db_i_24[ch_index_lane_5][db_i_index] : 0;
         db_i_shift[6] <= LANE_6_ENABLE == 1? rx_db_i_24[ch_index_lane_6][db_i_index] : 0;
         db_i_shift[7] <= LANE_7_ENABLE == 1? rx_db_i_24[ch_index_lane_7][db_i_index] : 0;
+        */
+        db_i_shift[0] <= rx_db_i_24[ch_index_lane_0][db_i_index];
+        db_i_shift[1] <= rx_db_i_24[ch_index_lane_1][db_i_index];
+        db_i_shift[2] <= rx_db_i_24[ch_index_lane_2][db_i_index];
+        db_i_shift[3] <= rx_db_i_24[ch_index_lane_3][db_i_index];
+        db_i_shift[4] <= rx_db_i_24[ch_index_lane_4][db_i_index];
+        db_i_shift[5] <= rx_db_i_24[ch_index_lane_5][db_i_index];
+        db_i_shift[6] <= rx_db_i_24[ch_index_lane_6][db_i_index];
+        db_i_shift[7] <= rx_db_i_24[ch_index_lane_7][db_i_index];
       end
 
       // simulate busy signal
