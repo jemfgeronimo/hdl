@@ -1,6 +1,6 @@
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/c5soc/c5soc_system_qsys.tcl
-source $ad_hdl_dir/projects/dc2677a/common/dc2677a_qsys.tcl
+source ../common/dc2677a_qsys.tcl
 
 #system ID
 set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}
