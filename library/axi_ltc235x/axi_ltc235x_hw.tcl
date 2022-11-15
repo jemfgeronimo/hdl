@@ -60,14 +60,14 @@ add_interface_port device_if lane_5 lane_5 Input 1
 add_interface_port device_if lane_6 lane_6 Input 1
 add_interface_port device_if lane_7 lane_7 Input 1
 # lvds
-add_interface_port device_if scki_p scki_p Output 1
-add_interface_port device_if scki_n scki_n Output 1
-add_interface_port device_if scko_p scko_p Input 1
-add_interface_port device_if scko_n scko_n Input 1
-add_interface_port device_if sdi_p sdi_p Output 1
-add_interface_port device_if sdi_n sdi_n Output 1
-add_interface_port device_if sdo_p sdo_p Input 1
-add_interface_port device_if sdo_n sdo_n Input 1
+#add_interface_port device_if scki_p scki_p Output 1
+#add_interface_port device_if scki_n scki_n Output 1
+#add_interface_port device_if scko_p scko_p Input 1
+#add_interface_port device_if scko_n scko_n Input 1
+#add_interface_port device_if sdi_p sdi_p Output 1
+#add_interface_port device_if sdi_n sdi_n Output 1
+#add_interface_port device_if sdo_p sdo_p Input 1
+#add_interface_port device_if sdo_n sdo_n Input 1
 
 # clock
 ad_interface clock external_clk input 1
