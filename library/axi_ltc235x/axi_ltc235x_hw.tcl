@@ -7,6 +7,7 @@ source ../../scripts/adi_env.tcl
 source ../scripts/adi_ip_intel.tcl
 
 ad_ip_create axi_ltc235x {AXI LTC235x Interface}
+set_module_property AUTHOR {Geronimo, John Erasmus Mari F.}
 set_module_property VALIDATION_CALLBACK info_param_validate
 ad_ip_files axi_ltc235x [list \
     $ad_hdl_dir/library/common/up_axi.v \
@@ -20,6 +21,7 @@ ad_ip_files axi_ltc235x [list \
     axi_ltc235x_tb.v \
     axi_ltc235x_cmos.v \
     axi_ltc235x.v]
+# add_documentation_link <title> <path>
 
 # parameters
 
