@@ -27,14 +27,14 @@ ad_ip_files axi_ltc235x [list \
 
 ad_ip_parameter ID INTEGER 0
 ad_ip_parameter LVDS_CMOS_N STD_LOGIC 0
-ad_ip_parameter LANE_0_ENABLE BOOLEAN 1
-ad_ip_parameter LANE_1_ENABLE BOOLEAN 1
-ad_ip_parameter LANE_2_ENABLE BOOLEAN 1
-ad_ip_parameter LANE_3_ENABLE BOOLEAN 1
-ad_ip_parameter LANE_4_ENABLE BOOLEAN 1
-ad_ip_parameter LANE_5_ENABLE BOOLEAN 1
-ad_ip_parameter LANE_6_ENABLE BOOLEAN 1
-ad_ip_parameter LANE_7_ENABLE BOOLEAN 1
+ad_ip_parameter LANE_0_ENABLE STD_LOGIC 1
+ad_ip_parameter LANE_1_ENABLE STD_LOGIC 1
+ad_ip_parameter LANE_2_ENABLE STD_LOGIC 1
+ad_ip_parameter LANE_3_ENABLE STD_LOGIC 1
+ad_ip_parameter LANE_4_ENABLE STD_LOGIC 1
+ad_ip_parameter LANE_5_ENABLE STD_LOGIC 1
+ad_ip_parameter LANE_6_ENABLE STD_LOGIC 1
+ad_ip_parameter LANE_7_ENABLE STD_LOGIC 1
 ad_ip_parameter NUM_CHANNELS INTEGER 8
 ad_ip_parameter DATA_WIDTH INTEGER 18
 ad_ip_parameter EXTERNAL_CLK STD_LOGIC 0
