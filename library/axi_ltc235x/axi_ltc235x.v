@@ -112,7 +112,14 @@ module axi_ltc235x #(
   // Write FIFO interface
 
   input                   adc_dovf,
-  output                  adc_valid,
+  output                  adc_valid_0,
+  output                  adc_valid_1,
+  output                  adc_valid_2,
+  output                  adc_valid_3,
+  output                  adc_valid_4,
+  output                  adc_valid_5,
+  output                  adc_valid_6,
+  output                  adc_valid_7,
   output                  adc_enable_0,
   output                  adc_enable_1,
   output                  adc_enable_2,
@@ -151,6 +158,8 @@ module axi_ltc235x #(
 
   // internal signals
 
+  wire                    adc_valid;
+
   wire                    up_clk;
   wire                    up_rstn;
   wire                    up_rreq_s;
@@ -184,6 +193,16 @@ module axi_ltc235x #(
   assign up_rstn = s_axi_aresetn;
 
   assign lvds_cmos_n = LVDS_CMOS_N[0];
+  assign cs_n = 'b0;
+
+  assign adc_valid_0 = adc_valid;
+  assign adc_valid_1 = adc_valid;
+  assign adc_valid_2 = adc_valid;
+  assign adc_valid_3 = adc_valid;
+  assign adc_valid_4 = adc_valid;
+  assign adc_valid_5 = adc_valid;
+  assign adc_valid_6 = adc_valid;
+  assign adc_valid_7 = adc_valid;
 
   assign adc_enable_0 = adc_enable[0];
   assign adc_enable_1 = adc_enable[1];
