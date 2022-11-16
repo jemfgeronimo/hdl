@@ -69,6 +69,7 @@ module axi_ltc235x #(
   input                   scko_n,
   input                   busy,
   output                  lvds_cmos_n,
+  output                  cs_n,
   output                  sdi,
   output                  sdi_p,
   output                  sdi_n,
