@@ -79,36 +79,10 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
 
 # others
 ad_interface signal adc_dovf Input 1
-ad_interface signal adc_valid Output 1
 
-add_interface ch0_if conduit end
-add_interface_port ch0_if adc_enable_0 enable Output 1
-add_interface_port ch0_if adc_data_0 data Output 32
-
-add_interface ch1_if conduit end
-add_interface_port ch1_if adc_enable_1 enable Output 1
-add_interface_port ch1_if adc_data_1 data Output 32
-
-add_interface ch2_if conduit end
-add_interface_port ch2_if adc_enable_2 enable Output 1
-add_interface_port ch2_if adc_data_2 data Output 32
-
-add_interface ch3_if conduit end
-add_interface_port ch3_if adc_enable_3 enable Output 1
-add_interface_port ch3_if adc_data_3 data Output 32
-
-add_interface ch4_if conduit end
-add_interface_port ch4_if adc_enable_4 enable Output 1
-add_interface_port ch4_if adc_data_4 data Output 32
-
-add_interface ch5_if conduit end
-add_interface_port ch5_if adc_enable_5 enable Output 1
-add_interface_port ch5_if adc_data_5 data Output 32
-
-add_interface ch6_if conduit end
-add_interface_port ch6_if adc_enable_6 enable Output 1
-add_interface_port ch6_if adc_data_6 data Output 32
-
-add_interface ch7_if conduit end
-add_interface_port ch7_if adc_enable_7 enable Output 1
-add_interface_port ch7_if adc_data_7 data Output 32
+for {set i 0} {$i < 8} {incr i} {
+    add_interface adc_ch_$i conduit end
+    add_interface_port adc_ch_$i adc_enable_$i enable Output 1
+    add_interface_port adc_ch_$i adc_valid_$i valid Input 1
+    add_interface_port adc_ch_$i adc_data_$i data Output 32
+}
