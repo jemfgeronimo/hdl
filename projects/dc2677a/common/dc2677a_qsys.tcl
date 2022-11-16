@@ -39,14 +39,14 @@ add_connection sys_clk.clk_reset axi_ltc235x.s_axi_reset
 # pwm gen (TODO: axi_pwm_gen_hw.tcl should be created)
 # can be replaced by pulse gen
 
-add_instance adc_pwm_gen axi_pwm_gen
-set_instance_parameter_value adc_pwm_gen {ID} {0}
-set_instance_parameter_value adc_pwm_gen {ASYNC_CLK_EN} {0}
-set_instance_parameter_value adc_pwm_gen {N_PWMS} {1}
-set_instance_parameter_value adc_pwm_gen {PWM_EXT_SYNC} {0}
-set_instance_parameter_value adc_pwm_gen {PULSE_0_WIDTH} {7}
-set_instance_parameter_value adc_pwm_gen {PULSE_0_PERIOD} {10}
-set_instance_parameter_value adc_pwm_gen {PULSE_0_OFFSET} {0}
+#add_instance adc_pwm_gen axi_pwm_gen
+#set_instance_parameter_value adc_pwm_gen {ID} {0}
+#set_instance_parameter_value adc_pwm_gen {ASYNC_CLK_EN} {0}
+#set_instance_parameter_value adc_pwm_gen {N_PWMS} {1}
+#set_instance_parameter_value adc_pwm_gen {PWM_EXT_SYNC} {0}
+#set_instance_parameter_value adc_pwm_gen {PULSE_0_WIDTH} {7}
+#set_instance_parameter_value adc_pwm_gen {PULSE_0_PERIOD} {10}
+#set_instance_parameter_value adc_pwm_gen {PULSE_0_OFFSET} {0}
 ad_interface signal cnv Output 1
 
 # pack
@@ -93,6 +93,7 @@ ad_cpu_interrupt 2 axi_adc_dma.interrupt_sender
 # cpu interconnects / address map (TODO: are the addresses not wrong?)
 
 ad_cpu_interconnect 0x00120000 axi_ltc235x.s_axi
+# ad_cpu_interconnect 0x00120000 adc_pwm_gen.s_axi
 ad_cpu_interconnect 0x00100000 axi_adc_dma.s_axi
 
 # mem interconnects / dma interconnects
