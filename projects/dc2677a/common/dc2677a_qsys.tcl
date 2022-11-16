@@ -14,25 +14,6 @@ set ADC_NUM_CHANNELS    8
 set ADC_DATA_WIDTH      18
 set ADC_EXTERNAL_CLK    0
 
-# ltc235x interface
-
-add_interface ltc235x_if conduit end
-add_interface_port ltc235x_if scki              scki            output  1
-add_interface_port ltc235x_if scko              scko            input   1
-add_interface_port ltc235x_if sdo_0             sdo_0           input   1
-add_interface_port ltc235x_if sdo_1             sdo_1           input   1
-add_interface_port ltc235x_if sdo_2             sdo_2           input   1
-add_interface_port ltc235x_if sdo_3             sdo_3           input   1
-add_interface_port ltc235x_if sdo_4             sdo_4           input   1
-add_interface_port ltc235x_if sdo_5             sdo_5           input   1
-add_interface_port ltc235x_if sdo_6             sdo_6           input   1
-add_interface_port ltc235x_if sdo_7             sdo_7           input   1
-add_interface_port ltc235x_if sdi               sdi             output  1
-add_interface_port ltc235x_if cnv               cnv             output  1
-add_interface_port ltc235x_if lvds_cmos_n       lvds_cmos_n     output  1
-add_interface_port ltc235x_if cs_n              cs_n            output  1
-add_interface_port ltc235x_if system_cpu_clk    system_cpu_clk  output  1
-
 # axi_ltc235x
 
 add_instance axi_ltc235x axi_ltc235x
