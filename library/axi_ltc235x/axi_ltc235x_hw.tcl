@@ -83,6 +83,6 @@ ad_interface signal adc_dovf Input 1
 for {set i 0} {$i < 8} {incr i} {
     add_interface adc_ch_$i conduit end
     add_interface_port adc_ch_$i adc_enable_$i enable Output 1
-    add_interface_port adc_ch_$i adc_valid_$i valid Input 1
+    add_interface_port adc_ch_$i adc_valid_$i valid Output 1
     add_interface_port adc_ch_$i adc_data_$i data Output 32
 }
