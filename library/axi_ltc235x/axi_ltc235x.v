@@ -70,6 +70,7 @@ module axi_ltc235x #(
   input                   busy,
   output                  lvds_cmos_n,
   output                  cs_n,
+  output                  pd,
   output                  sdi,
   output                  sdi_p,
   output                  sdi_n,
@@ -194,6 +195,7 @@ module axi_ltc235x #(
 
   assign lvds_cmos_n = LVDS_CMOS_N[0];
   assign cs_n = 'b0;
+  assign pd = 'b0;
 
   assign adc_valid_0 = adc_valid;
   assign adc_valid_1 = adc_valid;
