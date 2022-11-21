@@ -17,6 +17,10 @@ ad_ip_files axi_ltc235x [list \
     $ad_hdl_dir/library/common/up_xfer_status.v \
     $ad_hdl_dir/library/common/up_clock_mon.v \
     $ad_hdl_dir/library/common/up_adc_channel.v \
+    $ad_hdl_dir/library/intel/common/up_xfer_cntrl_constr.sdc \
+    $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \
+    $ad_hdl_dir/library/intel/common/up_xfer_status_constr.sdc \
+    $ad_hdl_dir/library/intel/common/up_clock_mon_constr.sdc \
     axi_ltc235x_cmos_tb.v \
     axi_ltc235x_tb.v \
     axi_ltc235x_cmos.v \
