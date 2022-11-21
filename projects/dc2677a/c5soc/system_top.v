@@ -107,7 +107,26 @@ module system_top (
   output          vga_vsync,
   output  [ 7:0]  vga_red,
   output  [ 7:0]  vga_grn,
-  output  [ 7:0]  vga_blu
+  output  [ 7:0]  vga_blu,
+
+  // ltc235x interface
+  output          lvds_cmos_n,
+  output          cnv,
+  input           busy,
+  output          pd,
+  output          cs_n,
+
+  input           sdo_0,
+  input           sdo_1,
+  input           sdo_2,
+  input           sdo_3,
+  input           sdo_4,
+  input           sdo_5,
+  input           sdo_6,
+  input           sdo_7,
+  output          scki,
+  input           scko,
+  output          sdi
 );
 
   // internal signals
@@ -219,6 +238,25 @@ module system_top (
     .vga_out_vga_if_vga_green (vga_grn),
     .vga_out_vga_if_vga_blue (vga_blu),
     .vga_out_vga_if_vga_hsync (vga_hsync),
-    .vga_out_vga_if_vga_vsync (vga_vsync));
+    .vga_out_vga_if_vga_vsync (vga_vsync)
+    
+    .axi_ltc235x_device_if_lvds_cmos_n (lvds_cmos_n),
+    .axi_ltc235x_device_if_busy (busy),
+    .axi_ltc235x_device_if_pd (pd),
+    .axi_ltc235x_device_if_cs_n (cs_n),
+    .if_cnv(cnv),
+    
+    .axi_ltc235x_device_if_scki (scki),
+    .axi_ltc235x_device_if_scko (scko),
+    .axi_ltc235x_device_if_sdi (sdi),
+    .axi_ltc235x_device_if_lane_0 (sdo_0),
+    .axi_ltc235x_device_if_lane_1 (sdo_1),
+    .axi_ltc235x_device_if_lane_2 (sdo_2),
+    .axi_ltc235x_device_if_lane_3 (sdo_3),
+    .axi_ltc235x_device_if_lane_4 (sdo_4),
+    .axi_ltc235x_device_if_lane_5 (sdo_5),
+    .axi_ltc235x_device_if_lane_6 (sdo_6),
+    .axi_ltc235x_device_if_lane_7 (sdo_7)
+    );
 
 endmodule
