@@ -97,7 +97,7 @@ ad_cpu_interrupt 2 axi_adc_dma.interrupt_sender
 # cpu interconnects / address map (TODO: are the addresses not wrong?)
 
 ad_cpu_interconnect 0x00120000 axi_ltc235x.s_axi
-# ad_cpu_interconnect 0x00120000 adc_pwm_gen.s_axi
+ad_cpu_interconnect 0x00140000 adc_pwm_gen.s_axi
 ad_cpu_interconnect 0x00100000 axi_adc_dma.s_axi
 
 # mem interconnects / dma interconnects
