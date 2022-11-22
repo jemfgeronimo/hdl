@@ -24,7 +24,7 @@ set_location_assignment PIN_J7 -to sdo_5        ; # sdo_5 78 lvds_rxp5 / sdo_p
 set_location_assignment PIN_H7 -to sdo_6        ; # sdo_6 80 lvds_rxn5 / sdo_n
 set_location_assignment PIN_H8 -to sdo_7        ; # sdo_7 84 lvds_rxp6
 set_location_assignment PIN_J9 -to scki         ; # scki 68 lvds_rxn3 / scki_n
-set_location_assignment PIN_K7 -to sck0         ; # scko 72 lvds_rxp4 / scko_p
+set_location_assignment PIN_K7 -to scko         ; # scko 72 lvds_rxp4 / scko_p
 set_location_assignment PIN_G8 -to sdi          ; # sdi 86 lvds_rxn6
 
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to lvds_cmos_n
