@@ -35,8 +35,6 @@ ad_ip_parameter PULSE_1_OFFSET INTEGER 0
 ad_ip_parameter PULSE_2_OFFSET INTEGER 0
 ad_ip_parameter PULSE_3_OFFSET INTEGER 0
 
-adi_add_auto_fpga_spec_params
-
 # interfaces
 
 # axi
