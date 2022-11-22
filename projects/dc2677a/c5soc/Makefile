@@ -16,5 +16,7 @@ LIB_DEPS += axi_hdmi_tx
 LIB_DEPS += axi_sysid
 LIB_DEPS += sysid_rom
 LIB_DEPS += axi_ltc235x
+LIB_DEPS += util_pack/util_cpack2
+LIB_DEPS += axi_pwm_gen
 
 include ../../scripts/project-intel.mk
