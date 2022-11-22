@@ -58,14 +58,14 @@ add_interface_port device_if pd pd Output 1
 add_interface_port device_if scki scki Output 1
 add_interface_port device_if scko scko Input 1
 add_interface_port device_if sdi sdi Output 1
-add_interface_port device_if lane_0 lane_0 Input 1
-add_interface_port device_if lane_1 lane_1 Input 1
-add_interface_port device_if lane_2 lane_2 Input 1
-add_interface_port device_if lane_3 lane_3 Input 1
-add_interface_port device_if lane_4 lane_4 Input 1
-add_interface_port device_if lane_5 lane_5 Input 1
-add_interface_port device_if lane_6 lane_6 Input 1
-add_interface_port device_if lane_7 lane_7 Input 1
+add_interface_port device_if sdo_0 sdo_0 Input 1
+add_interface_port device_if sdo_1 sdo_1 Input 1
+add_interface_port device_if sdo_2 sdo_2 Input 1
+add_interface_port device_if sdo_3 sdo_3 Input 1
+add_interface_port device_if sdo_4 sdo_4 Input 1
+add_interface_port device_if sdo_5 sdo_5 Input 1
+add_interface_port device_if sdo_6 sdo_6 Input 1
+add_interface_port device_if sdo_7 sdo_7 Input 1
 # lvds
 #add_interface_port device_if scki_p scki_p Output 1
 #add_interface_port device_if scki_n scki_n Output 1
