@@ -61,21 +61,16 @@ module axi_ltc235x #(
 
   input                   external_clk,
 
-  output                  scki,
-  input                   scko,
-  output                  scki_p,
-  output                  scki_n,
-  input                   scko_p,
-  input                   scko_n,
+  // common
   input                   busy,
   output                  lvds_cmos_n,
   output                  cs_n,
   output                  pd,
+
+  // cmos
+  output                  scki,
+  input                   scko,
   output                  sdi,
-  output                  sdi_p,
-  output                  sdi_n,
-  input                   sdo_p,
-  input                   sdo_n,
   input                   sdo_0,
   input                   sdo_1,
   input                   sdo_2,
@@ -85,6 +80,15 @@ module axi_ltc235x #(
   input                   sdo_6,
   input                   sdo_7,
   
+  // lvds
+  output                  scki_p,
+  output                  scki_n,
+  input                   scko_p,
+  input                   scko_n,
+  output                  sdi_p,
+  output                  sdi_n,
+  input                   sdo_p,
+  input                   sdo_n,
 
   // AXI Slave Memory Map
 
