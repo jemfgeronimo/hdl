@@ -27,7 +27,23 @@ set_location_assignment PIN_J9 -to scki         ; # scki 68 lvds_rxn3 / scki_n
 set_location_assignment PIN_K7 -to sck0         ; # scko 72 lvds_rxp4 / scko_p
 set_location_assignment PIN_G8 -to sdi          ; # sdi 86 lvds_rxn6
 
-# TODO
-# set_instance_assignment
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to lvds_cmos_n
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to cnv
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to busy
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to cs_n
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to pd
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdo_0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdo_1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdo_2
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdo_3
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdo_4
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdo_5
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdo_6
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdo_7
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to scki
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to scko
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sdi
 
 execute_flow -compile
