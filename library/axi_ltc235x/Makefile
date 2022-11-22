@@ -20,6 +20,10 @@ GENERIC_DEPS += axi_ltc235x_cmos.v
 
 XILINX_DEPS += axi_ltc235x_ip.tcl
 
+INTEL_DEPS += ../intel/common/up_rst_constr.sdc
+INTEL_DEPS += ../intel/common/up_xfer_cntrl_constr.sdc
+INTEL_DEPS += ../intel/common/up_xfer_status_constr.sdc
+INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc
 INTEL_DEPS  += axi_ltc235x_hw.tcl
 
 include ${ADI_HDL_DIR}/library/scripts/library.mk
