@@ -36,18 +36,22 @@ add_connection sys_clk.clk axi_ltc235x.if_external_clk
 add_connection sys_clk.clk axi_ltc235x.s_axi_clock
 add_connection sys_clk.clk_reset axi_ltc235x.s_axi_reset
 
-# pwm gen (TODO: axi_pwm_gen_hw.tcl should be created)
-# can be replaced by pulse gen
+# pwm gen
 
-#add_instance adc_pwm_gen axi_pwm_gen
-#set_instance_parameter_value adc_pwm_gen {ID} {0}
-#set_instance_parameter_value adc_pwm_gen {ASYNC_CLK_EN} {0}
-#set_instance_parameter_value adc_pwm_gen {N_PWMS} {1}
-#set_instance_parameter_value adc_pwm_gen {PWM_EXT_SYNC} {0}
-#set_instance_parameter_value adc_pwm_gen {PULSE_0_WIDTH} {7}
-#set_instance_parameter_value adc_pwm_gen {PULSE_0_PERIOD} {10}
-#set_instance_parameter_value adc_pwm_gen {PULSE_0_OFFSET} {0}
+add_instance adc_pwm_gen axi_pwm_gen
+set_instance_parameter_value adc_pwm_gen {ID} {0}
+set_instance_parameter_value adc_pwm_gen {ASYNC_CLK_EN} {0}
+set_instance_parameter_value adc_pwm_gen {N_PWMS} {1}
+set_instance_parameter_value adc_pwm_gen {PWM_EXT_SYNC} {0}
+set_instance_parameter_value adc_pwm_gen {EXT_ASYNC_SYNC} {0}
+set_instance_parameter_value adc_pwm_gen {PULSE_0_WIDTH} {1}
+set_instance_parameter_value adc_pwm_gen {PULSE_0_PERIOD} {8}
+set_instance_parameter_value adc_pwm_gen {PULSE_0_OFFSET} {0}
 ad_interface signal cnv Output 1
+add_connection adc_pwm_gen.if_pwm_0 if_cnv
+add_connection sys_clk.clk adc_pwm_gen.if_ext_clk
+add_connection sys_clk.clk adc_pwm_gen.s_axi_clock
+add_connection sys_clk.clk_reset adc_pwm_gen.s_axi_reset
 
 # pack
 
