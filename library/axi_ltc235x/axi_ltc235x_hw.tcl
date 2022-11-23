@@ -84,7 +84,7 @@ ad_interface clock external_clk input 1
 ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
 
 # others
-ad_interface signal adc_dovf Input 1
+ad_interface signal adc_dovf Input 1 ovf
 
 for {set i 0} {$i < 8} {incr i} {
     add_interface adc_ch_$i conduit end
