@@ -91,4 +91,7 @@ for {set i 0} {$i < 8} {incr i} {
     add_interface_port adc_ch_$i adc_enable_$i enable Output 1
     add_interface_port adc_ch_$i adc_valid_$i valid Output 1
     add_interface_port adc_ch_$i adc_data_$i data Output 32
+    
+    set_interface_property adc_ch_$i associatedClock if_external_clk
+    set_interface_property adc_ch_$i associatedReset ""
 }
