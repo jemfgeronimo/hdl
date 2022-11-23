@@ -60,8 +60,8 @@ add_instance util_adc_pack util_cpack2
 set_instance_parameter_value util_adc_pack {NUM_OF_CHANNELS} $ADC_NUM_CHANNELS
 set_instance_parameter_value util_adc_pack {SAMPLES_PER_CHANNEL} {1}
 set_instance_parameter_value util_adc_pack {SAMPLE_DATA_WIDTH} {32}
-add_connection sys_dma_clk.clk util_adc_pack.clk
-add_connection sys_dma_clk.clk_reset util_adc_pack.reset
+add_connection sys_clk.clk util_adc_pack.clk
+add_connection sys_clk.clk_reset util_adc_pack.reset
 for {set i 0} {$i < $ADC_NUM_CHANNELS} {incr i} {
     add_connection axi_ltc235x.adc_ch_$i util_adc_pack.adc_ch_$i
 }
@@ -83,9 +83,9 @@ set_instance_parameter_value axi_adc_dma {DMA_TYPE_SRC} {2}
 set_instance_parameter_value axi_adc_dma {FIFO_SIZE} {4}
 add_connection sys_clk.clk axi_adc_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_adc_dma.s_axi_reset
-add_connection sys_dma_clk.clk axi_adc_dma.m_dest_axi_clock
-add_connection sys_dma_clk.clk_reset axi_adc_dma.m_dest_axi_reset
-add_connection sys_dma_clk.clk axi_adc_dma.if_fifo_wr_clk
+add_connection sys_clk.clk axi_adc_dma.m_dest_axi_clock
+add_connection sys_clk.clk_reset axi_adc_dma.m_dest_axi_reset
+add_connection sys_clk.clk axi_adc_dma.if_fifo_wr_clk
 add_connection util_adc_pack.if_packed_fifo_wr_en axi_adc_dma.if_fifo_wr_en
 add_connection util_adc_pack.if_packed_fifo_wr_sync axi_adc_dma.if_fifo_wr_sync
 add_connection util_adc_pack.if_packed_fifo_wr_data axi_adc_dma.if_fifo_wr_din
