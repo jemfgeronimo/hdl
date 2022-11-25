@@ -30,19 +30,19 @@ ad_ip_files axi_ltc235x [list \
 # parameters
 
 ad_ip_parameter ID INTEGER 0
-ad_ip_parameter LVDS_CMOS_N STD_LOGIC 0
-ad_ip_parameter LANE_0_ENABLE STD_LOGIC 1
-ad_ip_parameter LANE_1_ENABLE STD_LOGIC 1
-ad_ip_parameter LANE_2_ENABLE STD_LOGIC 1
-ad_ip_parameter LANE_3_ENABLE STD_LOGIC 1
-ad_ip_parameter LANE_4_ENABLE STD_LOGIC 1
-ad_ip_parameter LANE_5_ENABLE STD_LOGIC 1
-ad_ip_parameter LANE_6_ENABLE STD_LOGIC 1
-ad_ip_parameter LANE_7_ENABLE STD_LOGIC 1
+ad_ip_parameter LVDS_CMOS_N INTEGER 0
+ad_ip_parameter LANE_0_ENABLE INTEGER 1
+ad_ip_parameter LANE_1_ENABLE INTEGER 1
+ad_ip_parameter LANE_2_ENABLE INTEGER 1
+ad_ip_parameter LANE_3_ENABLE INTEGER 1
+ad_ip_parameter LANE_4_ENABLE INTEGER 1
+ad_ip_parameter LANE_5_ENABLE INTEGER 1
+ad_ip_parameter LANE_6_ENABLE INTEGER 1
+ad_ip_parameter LANE_7_ENABLE INTEGER 1
 ad_ip_parameter NUM_CHANNELS INTEGER 8
 ad_ip_parameter DATA_WIDTH INTEGER 18
 ad_ip_parameter SOFTSPAN_NEXT POSITIVE 0xffffff
-ad_ip_parameter EXTERNAL_CLK STD_LOGIC 0
+ad_ip_parameter EXTERNAL_CLK INTEGER 0
 
 adi_add_auto_fpga_spec_params
 
