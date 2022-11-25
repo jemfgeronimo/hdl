@@ -238,7 +238,7 @@ module system_top (
     .vga_out_vga_if_vga_green (vga_grn),
     .vga_out_vga_if_vga_blue (vga_blu),
     .vga_out_vga_if_vga_hsync (vga_hsync),
-    .vga_out_vga_if_vga_vsync (vga_vsync)
+    .vga_out_vga_if_vga_vsync (vga_vsync),
     
     .axi_ltc235x_device_if_lvds_cmos_n (lvds_cmos_n),
     .axi_ltc235x_device_if_busy (busy),
