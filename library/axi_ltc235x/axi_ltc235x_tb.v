@@ -153,7 +153,7 @@ module axi_ltc235x_tb ();
 
   // {18-bit data, channel id, softspan}
   generate
-    for (i = 0; i < 8; i = i + 1) begin
+    for (i = 0; i < 8; i = i + 1) begin: db_i_24
       assign rx_db_i_24[i] = {rx_db_i[i][17:0], rx_db_i_ch[i], rx_db_i_softspan[i]};
     end
   endgenerate
@@ -268,7 +268,7 @@ module axi_ltc235x_tb ();
 
   // softspan per lane for next conversion
   generate
-    for (i = 0; i < 8; i = i + 1) begin
+    for (i = 0; i < 8; i = i + 1) begin: softspan_next_blk
       assign softspan_next_s[i] = softspan_next[(2 + (i*3)) : (i*3)];
     end
   endgenerate
