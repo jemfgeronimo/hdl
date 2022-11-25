@@ -18,10 +18,10 @@ ad_ip_files axi_pwm_gen [list \
 # parameters
 
 ad_ip_parameter ID INTEGER 0
-ad_ip_parameter ASYNC_CLK_EN STD_LOGIC 1
+ad_ip_parameter ASYNC_CLK_EN INTEGER 1
 ad_ip_parameter N_PWMS INTEGER 1
-ad_ip_parameter PWM_EXT_SYNC STD_LOGIC 0
-ad_ip_parameter EXT_ASYNC_SYNC STD_LOGIC 0
+ad_ip_parameter PWM_EXT_SYNC INTEGER 0
+ad_ip_parameter EXT_ASYNC_SYNC INTEGER 0
 ad_ip_parameter PULSE_0_WIDTH INTEGER 7
 ad_ip_parameter PULSE_1_WIDTH INTEGER 7
 ad_ip_parameter PULSE_2_WIDTH INTEGER 7
