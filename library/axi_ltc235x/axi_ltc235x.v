@@ -178,9 +178,9 @@ module axi_ltc235x #(
 
   wire    [13:0]          up_addr_s;
   wire    [31:0]          up_wdata_s;
-  wire    [31:0]          up_rdata_s[0:8];
-  wire    [ 8:0]          up_rack_s;
-  wire    [ 8:0]          up_wack_s;
+  wire    [31:0]          up_rdata_s[0:9];
+  wire    [ 9:0]          up_rack_s;
+  wire    [ 9:0]          up_wack_s;
 
   // read raw, feature
   wire                    rd_req_s;
