@@ -163,6 +163,8 @@ module axi_ltc235x #(
 
   // internal signals
 
+  wire    [23:0]          softspan_next;
+
   wire                    adc_valid;
 
   wire                    up_clk;
@@ -276,12 +278,12 @@ module axi_ltc235x #(
       axi_ltc235x_cmos #(
         .NUM_CHANNELS (NUM_CHANNELS),
         .DATA_WIDTH (DATA_WIDTH),
-        .ACTIVE_LANE (ACTIVE_LANES),
-        .SOFTSPAN_NEXT (SOFTSPAN_NEXT))
+        .ACTIVE_LANE (ACTIVE_LANES))
       i_ltc235x_cmos (
         .rst (adc_rst_s),
         .clk (adc_clk_s),
         .adc_enable (adc_enable),
+        .softspan_next (softspan_next),
         .scki (scki),
         .db_o (sdi),
         .scko (scko),
