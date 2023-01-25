@@ -25,7 +25,7 @@ INTEL_DEPS += ../intel/common/up_rst_constr.sdc
 INTEL_DEPS += ../intel/common/up_xfer_cntrl_constr.sdc
 INTEL_DEPS += ../intel/common/up_xfer_status_constr.sdc
 INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc
-INTEL_DEPS  += axi_ltc235x_hw.tcl
+INTEL_DEPS += axi_ltc235x_hw.tcl
 
 include ../scripts/library.mk
 
