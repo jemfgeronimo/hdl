@@ -237,9 +237,29 @@ module axi_ltc235x #(
                   up_rdata_s[5] |
                   up_rdata_s[6] |
                   up_rdata_s[7] |
-                  up_rdata_s[8];
+                  up_rdata_s[8] |
+                  up_rdata_s[9];
     end
   end
+
+  // AXI_LTC235X REGMAP
+
+  axi_ltc235x_regmap #(
+    .SOFTSPAN_NEXT (SOFTSPAN_NEXT))
+  i_ltc235x_regmap (
+    .softspan_next (softspan_next),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq_s),
+    .up_waddr (up_waddr_s),
+    .up_wdata (up_wdata_s),
+    .up_wack (up_wack_s[9]),
+    .up_rreq (up_rreq_s),
+    .up_raddr (up_raddr_s),
+    .up_rdata (up_rdata_s[9]),
+    .up_rack (up_rack_s[9]));
+
+  // CMOS/LVDS INTERFACE
 
   generate
     if (EXTERNAL_CLK == 1'b1) begin
