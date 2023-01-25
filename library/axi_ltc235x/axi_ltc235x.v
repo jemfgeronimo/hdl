@@ -221,7 +221,7 @@ module axi_ltc235x #(
   assign adc_enable_6 = adc_enable[6];
   assign adc_enable_7 = adc_enable[7];
 
-  // processor read interface
+  // processor read/write interface
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
