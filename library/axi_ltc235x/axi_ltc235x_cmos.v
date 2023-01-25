@@ -155,7 +155,7 @@ module axi_ltc235x_cmos #(
 
   wire        [31:0]  adc_data_s [7:0];
   wire        [ 2:0]  adc_ch_id_s [7:0];
-  wire        [ 2:0]  adc_softspan [7:0];
+  wire        [ 2:0]  adc_softspan_s [7:0];
 
   ////////////////////////////////////////////////////// SCKI
 
@@ -408,9 +408,9 @@ module axi_ltc235x_cmos #(
   genvar i;
   generate
     for (i=0; i < 8; i=i+1) begin: format
-      assign adc_data_s[i] = (adc_softspan[i] == 3'b0)? 32'h0 : (adc_softspan[i][1])? {{14{adc_data_store[i][23]}}, adc_data_store[i][23:6]} : {14'b0, adc_data_store[i][23:6]};
+      assign adc_data_s[i] = (adc_softspan_s[i] == 3'b0)? 32'h0 : (adc_softspan_s[i][1])? {{14{adc_data_store[i][23]}}, adc_data_store[i][23:6]} : {14'b0, adc_data_store[i][23:6]};
       assign adc_ch_id_s[i] = adc_data_store[i][5:3];
-      assign adc_softspan[i] = adc_data_store[i][2:0];
+      assign adc_softspan_s[i] = adc_data_store[i][2:0];
     end
   endgenerate
 
