@@ -17,6 +17,7 @@ GENERIC_DEPS += axi_ltc235x_cmos_tb.v
 GENERIC_DEPS += axi_ltc235x_tb.v
 GENERIC_DEPS += axi_ltc235x.v
 GENERIC_DEPS += axi_ltc235x_cmos.v
+GENERIC_DEPS += axi_ltc235x_regmap.v
 
 XILINX_DEPS += axi_ltc235x_ip.tcl
 
