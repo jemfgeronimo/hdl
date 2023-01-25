@@ -372,8 +372,10 @@ module axi_ltc235x_cmos #(
       adc_data_store[5] <= 'd0;
       adc_data_store[6] <= 'd0;
       adc_data_store[7] <= 'd0;
+      softspan_next_int <= 'd0;
     end else begin
       if (!adc_valid_init_d & adc_valid_init) begin
+        softspan_next_int <= softspan_next; // update next softspan
         if (adc_lane0_shift_d[3] == 1'b1) begin
           adc_data_store[adc_lane0_shift_d[2:0]] <= adc_data_init[0];
         end
@@ -482,7 +484,8 @@ module axi_ltc235x_cmos #(
       end
     end
   end
-  assign db_o = (db_o_index != 5'b11111)? SOFTSPAN_NEXT[db_o_index] : 0;
+  
+  assign db_o = (db_o_index != 5'b11111)? softspan_next_int[db_o_index] : 0;
 
   // TODO: add support for other ltc235x
 
