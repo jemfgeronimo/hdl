@@ -244,23 +244,6 @@ module axi_ltc235x #(
     end
   end
 
-  // AXI_LTC235X REGMAP
-
-  axi_ltc235x_regmap #(
-    .SOFTSPAN_NEXT (SOFTSPAN_NEXT))
-  i_ltc235x_regmap (
-    .softspan_next (softspan_next),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq_s),
-    .up_waddr (up_waddr_s),
-    .up_wdata (up_wdata_s),
-    .up_wack (up_wack_s[9]),
-    .up_rreq (up_rreq_s),
-    .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_s[9]),
-    .up_rack (up_rack_s[9]));
-
   // CMOS/LVDS INTERFACE
 
   generate
@@ -425,6 +408,7 @@ module axi_ltc235x #(
     .up_usr_chanmax_in (8),
     .up_adc_gpio_in (32'b0),
     .up_adc_gpio_out (),
+    .softspan (softspan_next),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
