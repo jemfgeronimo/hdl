@@ -79,7 +79,7 @@ module axi_ltc235x #(
   input                   sdo_5,
   input                   sdo_6,
   input                   sdo_7,
-  
+
   // lvds
   output                  scki_p,
   output                  scki_n,

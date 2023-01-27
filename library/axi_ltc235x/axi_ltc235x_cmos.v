@@ -492,7 +492,7 @@ module axi_ltc235x_cmos #(
     end
   end
 
-	////////////////////////////////////////////////////////////////////////// ADC SDI 
+	////////////////////////////////////////////////////////////////////////// ADC SDI
   // every negedge of scki, update index of db_o
   always @(posedge clk) begin
     if (start_transfer_s || rst) begin
@@ -503,7 +503,7 @@ module axi_ltc235x_cmos #(
       end
     end
   end
-  
+
   assign db_o = (db_o_index != 5'b11111)? softspan_next_int[db_o_index] : 0;
 
   // TODO: add support for other ltc235x
