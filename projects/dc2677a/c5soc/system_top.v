@@ -242,7 +242,6 @@ module system_top (
     .axi_ltc235x_device_if_sdo_4 (sdo_4),
     .axi_ltc235x_device_if_sdo_5 (sdo_5),
     .axi_ltc235x_device_if_sdo_6 (sdo_6),
-    .axi_ltc235x_device_if_sdo_7 (sdo_7)
-    );
+    .axi_ltc235x_device_if_sdo_7 (sdo_7));
 
 endmodule

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -261,8 +261,8 @@ module axi_ltc235x #(
       axi_ltc235x_cmos #(
         .NUM_CHANNELS (NUM_CHANNELS),
         .DATA_WIDTH (DATA_WIDTH),
-        .ACTIVE_LANE (ACTIVE_LANES))
-      i_ltc235x_cmos (
+        .ACTIVE_LANE (ACTIVE_LANES)
+      ) i_ltc235x_cmos (
         .rst (adc_rst_s),
         .clk (adc_clk_s),
         .adc_enable (adc_enable),

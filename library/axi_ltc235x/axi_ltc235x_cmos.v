@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -36,9 +36,9 @@
 `timescale 1ns/100ps
 
 module axi_ltc235x_cmos #(
-	parameter NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
-	parameter DATA_WIDTH = 18,	// 18 or 16
-	parameter ACTIVE_LANE = 8'b1111_1111
+	parameter               NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
+	parameter               DATA_WIDTH = 18,	// 18 or 16
+	parameter               ACTIVE_LANE = 8'b1111_1111
 ) (
 
   input                   rst,
@@ -509,4 +509,3 @@ module axi_ltc235x_cmos #(
   // TODO: add support for other ltc235x
 
 endmodule
-
