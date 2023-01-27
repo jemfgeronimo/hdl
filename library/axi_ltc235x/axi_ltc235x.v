@@ -34,7 +34,7 @@
 // ***************************************************************************
 
 `timescale 1ns/100ps
-/* verilator lint_off PINCONNECTEMPTY */
+
 module axi_ltc235x #(
 
   parameter       ID = 0,
@@ -79,7 +79,7 @@ module axi_ltc235x #(
   input                   sdo_5,
   input                   sdo_6,
   input                   sdo_7,
-/*
+
   // lvds
   output                  scki_p,
   output                  scki_n,
@@ -89,7 +89,7 @@ module axi_ltc235x #(
   output                  sdi_n,
   input                   sdo_p,
   input                   sdo_n,
-*/
+
   // AXI Slave Memory Map
 
   input                   s_axi_aclk,
@@ -463,4 +463,3 @@ module axi_ltc235x #(
   // TODO: add support for other LTC235x members
 
 endmodule
-/* verilator lint_on PINCONNECTEMPTY */
