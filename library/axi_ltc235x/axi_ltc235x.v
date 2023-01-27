@@ -34,7 +34,7 @@
 // ***************************************************************************
 
 `timescale 1ns/100ps
-
+/* verilator lint_off PINCONNECTEMPTY */
 module axi_ltc235x #(
 
   parameter       ID = 0,
@@ -463,3 +463,4 @@ module axi_ltc235x #(
   // TODO: add support for other LTC235x members
 
 endmodule
+/* verilator lint_on PINCONNECTEMPTY */
