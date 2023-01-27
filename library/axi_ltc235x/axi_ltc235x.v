@@ -79,7 +79,7 @@ module axi_ltc235x #(
   input                   sdo_5,
   input                   sdo_6,
   input                   sdo_7,
-
+/*
   // lvds
   output                  scki_p,
   output                  scki_n,
@@ -89,7 +89,7 @@ module axi_ltc235x #(
   output                  sdi_n,
   input                   sdo_p,
   input                   sdo_n,
-
+*/
   // AXI Slave Memory Map
 
   input                   s_axi_aclk,
@@ -178,9 +178,9 @@ module axi_ltc235x #(
 
   wire    [13:0]          up_addr_s;
   wire    [31:0]          up_wdata_s;
-  wire    [31:0]          up_rdata_s[0:9];
-  wire    [ 9:0]          up_rack_s;
-  wire    [ 9:0]          up_wack_s;
+  wire    [31:0]          up_rdata_s[0:8];
+  wire    [ 8:0]          up_rack_s;
+  wire    [ 8:0]          up_wack_s;
 
   // read raw, feature
   wire                    rd_req_s;
@@ -239,8 +239,7 @@ module axi_ltc235x #(
                   up_rdata_s[5] |
                   up_rdata_s[6] |
                   up_rdata_s[7] |
-                  up_rdata_s[8] |
-                  up_rdata_s[9];
+                  up_rdata_s[8];
     end
   end
 
@@ -295,6 +294,14 @@ module axi_ltc235x #(
         .adc_data_5 (adc_data_5),
         .adc_data_6 (adc_data_6),
         .adc_data_7 (adc_data_7),
+        .adc_softspan_0 (),
+        .adc_softspan_1 (),
+        .adc_softspan_2 (),
+        .adc_softspan_3 (),
+        .adc_softspan_4 (),
+        .adc_softspan_5 (),
+        .adc_softspan_6 (),
+        .adc_softspan_7 (),
         .adc_valid (adc_valid));
    end
   endgenerate
@@ -327,6 +334,7 @@ module axi_ltc235x #(
         .adc_read_data (32'h0),
         .adc_status_header({5'd0, adc_status_header[i]}),
         .adc_crc_err(1'b0),
+        .up_adc_crc_err (),
         .up_adc_pn_err (),
         .up_adc_pn_oos (),
         .up_adc_or (),
