@@ -36,9 +36,9 @@
 `timescale 1ns/100ps
 
 module axi_ltc235x_cmos #(
-	parameter   NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
-	parameter   DATA_WIDTH = 18,	// 18 or 16
-	parameter   ACTIVE_LANE = 8'b1111_1111
+	parameter               NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
+	parameter               DATA_WIDTH = 18,	// 18 or 16
+	parameter               ACTIVE_LANE = 8'b1111_1111
 ) (
 
   input                   rst,
