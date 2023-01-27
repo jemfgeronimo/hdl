@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2022 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2014 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -150,7 +150,6 @@ module system_top (
   // instantiations
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
-
     .sys_hps_memory_mem_a (ddr3_a),
     .sys_hps_memory_mem_ba (ddr3_ba),
     .sys_hps_memory_mem_ck (ddr3_ck_p),
@@ -167,7 +166,6 @@ module system_top (
     .sys_hps_memory_mem_odt (ddr3_odt),
     .sys_hps_memory_mem_dm (ddr3_dm),
     .sys_hps_memory_oct_rzqin (ddr3_rzq),
-
     .sys_hps_hps_io_hps_io_emac1_inst_TX_CLK (eth1_tx_clk),
     .sys_hps_hps_io_hps_io_emac1_inst_TXD0 (eth1_tx_d[0]),
     .sys_hps_hps_io_hps_io_emac1_inst_TXD1 (eth1_tx_d[1]),
@@ -182,21 +180,18 @@ module system_top (
     .sys_hps_hps_io_hps_io_emac1_inst_RXD1 (eth1_rx_d[1]),
     .sys_hps_hps_io_hps_io_emac1_inst_RXD2 (eth1_rx_d[2]),
     .sys_hps_hps_io_hps_io_emac1_inst_RXD3 (eth1_rx_d[3]),
-
     .sys_hps_hps_io_hps_io_qspi_inst_IO0 (qspi_io[0]),
     .sys_hps_hps_io_hps_io_qspi_inst_IO1 (qspi_io[1]),
     .sys_hps_hps_io_hps_io_qspi_inst_IO2 (qspi_io[2]),
     .sys_hps_hps_io_hps_io_qspi_inst_IO3 (qspi_io[3]),
     .sys_hps_hps_io_hps_io_qspi_inst_SS0 (qspi_ss0),
     .sys_hps_hps_io_hps_io_qspi_inst_CLK (qspi_clk),
-
     .sys_hps_hps_io_hps_io_sdio_inst_CMD (sdio_cmd),
     .sys_hps_hps_io_hps_io_sdio_inst_D0 (sdio_d[0]),
     .sys_hps_hps_io_hps_io_sdio_inst_D1 (sdio_d[1]),
     .sys_hps_hps_io_hps_io_sdio_inst_CLK (sdio_clk),
     .sys_hps_hps_io_hps_io_sdio_inst_D2 (sdio_d[2]),
     .sys_hps_hps_io_hps_io_sdio_inst_D3 (sdio_d[3]),
-
     .sys_hps_hps_io_hps_io_usb1_inst_D0 (usb1_d[0]),
     .sys_hps_hps_io_hps_io_usb1_inst_D1 (usb1_d[1]),
     .sys_hps_hps_io_hps_io_usb1_inst_D2 (usb1_d[2]),
@@ -209,43 +204,34 @@ module system_top (
     .sys_hps_hps_io_hps_io_usb1_inst_STP (usb1_stp),
     .sys_hps_hps_io_hps_io_usb1_inst_DIR (usb1_dir),
     .sys_hps_hps_io_hps_io_usb1_inst_NXT (usb1_nxt),
-
     .sys_hps_hps_io_hps_io_spim1_inst_CLK (spim1_clk),
     .sys_hps_hps_io_hps_io_spim1_inst_MOSI (spim1_mosi),
     .sys_hps_hps_io_hps_io_spim1_inst_MISO (spim1_miso),
     .sys_hps_hps_io_hps_io_spim1_inst_SS0 (spim1_ss0),
-
     .sys_hps_hps_io_hps_io_uart0_inst_RX (uart0_rx),
     .sys_hps_hps_io_hps_io_uart0_inst_TX (uart0_tx),
-
     .sys_gpio_bd_in_port (sys_gpio_bd_i),
     .sys_gpio_bd_out_port (sys_gpio_bd_o),
     .sys_gpio_in_export (sys_gpio_i),
     .sys_gpio_out_export (sys_gpio_o),
-
     .pr_rom_data_nc_rom_data ('h0),
-
     .sys_hps_h2f_reset_reset_n (sys_resetn),
     .sys_rst_reset_n (sys_resetn),
-
     .sys_spi_MISO (1'b0),
     .sys_spi_MOSI (),
     .sys_spi_SCLK (),
     .sys_spi_SS_n (1'b1),
-
     .vga_out_vga_if_vga_clk (vga_clk),
     .vga_out_vga_if_vga_red (vga_red),
     .vga_out_vga_if_vga_green (vga_grn),
     .vga_out_vga_if_vga_blue (vga_blu),
     .vga_out_vga_if_vga_hsync (vga_hsync),
     .vga_out_vga_if_vga_vsync (vga_vsync),
-    
     .axi_ltc235x_device_if_lvds_cmos_n (lvds_cmos_n),
     .axi_ltc235x_device_if_busy (busy),
     .axi_ltc235x_device_if_pd (pd),
     .axi_ltc235x_device_if_cs_n (cs_n),
     .axi_ltc235x_cnv_if_pwm_0(cnv),
-    
     .axi_ltc235x_device_if_scki (scki),
     .axi_ltc235x_device_if_scko (scko),
     .axi_ltc235x_device_if_sdi (sdi),
