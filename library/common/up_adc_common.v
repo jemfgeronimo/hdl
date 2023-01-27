@@ -133,7 +133,7 @@ module up_adc_common #(
 
   // parameters
 
-  localparam  VERSION = 32'h000a0262;
+  localparam  VERSION = 32'h000a0300;
   localparam  SOFTSPAN_DEFAULT = 24'hff_ffff;
 
   // internal registers
