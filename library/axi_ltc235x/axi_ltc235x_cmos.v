@@ -166,8 +166,6 @@ module axi_ltc235x_cmos #(
   wire        [ 2:0]  adc_ch_id_s [7:0];
   wire        [ 2:0]  adc_softspan_s [7:0];
 
-  ////////////////////////////////////////////////////// SCKI
-
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       busy_m1 <= 1'b0;
@@ -207,8 +205,6 @@ module axi_ltc235x_cmos #(
 
   assign scki_cnt_rst = (scki_counter == DW);
   assign scki = scki_i | ~acquire_data;
-
-  /////////////////////////////////////////////////////////// DATA FLOW
 
   /*
   The device sends each channel data on one of the 8 lines.
@@ -453,8 +449,6 @@ module axi_ltc235x_cmos #(
   assign adc_softspan_6 = adc_softspan_s[6];
   assign adc_softspan_7 = adc_softspan_s[7];
 
-//////////////////////////////////////////////////////////// VALID SIGNAL
-
   // initial valid signal
   always @(posedge clk) begin
     if (rst == 1'b1) begin
@@ -492,7 +486,6 @@ module axi_ltc235x_cmos #(
     end
   end
 
-	////////////////////////////////////////////////////////////////////////// ADC SDI
   // every negedge of scki, update index of db_o
   always @(posedge clk) begin
     if (start_transfer_s || rst) begin
@@ -505,7 +498,5 @@ module axi_ltc235x_cmos #(
   end
 
   assign db_o = (db_o_index != 5'b11111)? softspan_next_int[db_o_index] : 0;
-
-  // TODO: add support for other ltc235x
 
 endmodule
