@@ -53,7 +53,6 @@ module axi_ltc235x #(
   parameter       LANE_7_ENABLE = "true",
   parameter       NUM_CHANNELS = 8,	// 8 for 2358, 4 for 2357, 2 for 2353
   parameter       DATA_WIDTH = 18,	// 18 or 16
-  parameter       SOFTSPAN_NEXT = 24'hff_ffff,
   parameter       EXTERNAL_CLK = 0
 ) (
 
@@ -163,7 +162,8 @@ module axi_ltc235x #(
 
   // internal signals
 
-  wire    [23:0]          softspan_next;
+  wire    [23:0]          softspan_next_24;
+  wire    [ 2:0]          softspan_next_3[0:7];
 
   wire                    adc_valid;
 
@@ -194,6 +194,7 @@ module axi_ltc235x #(
   wire    [ 7:0]          adc_enable;
   wire    [ 2:0]          adc_status_header[0:7];
 
+
   // defaults
 
   assign up_clk = s_axi_aclk;
@@ -220,6 +221,8 @@ module axi_ltc235x #(
   assign adc_enable_5 = adc_enable[5];
   assign adc_enable_6 = adc_enable[6];
   assign adc_enable_7 = adc_enable[7];
+
+  assign softspan_next_24 = {softspan_next_3[7], softspan_next_3[6], softspan_next_3[5], softspan_next_3[4], softspan_next_3[3], softspan_next_3[2], softspan_next_3[1], softspan_next_3[0]};
 
   // processor read/write interface
 
@@ -265,7 +268,7 @@ module axi_ltc235x #(
         .rst (adc_rst_s),
         .clk (adc_clk_s),
         .adc_enable (adc_enable),
-        .softspan_next (softspan_next),
+        .softspan_next (softspan_next_24),
         .scki (scki),
         .db_o (sdi),
         .scko (scko),
@@ -352,6 +355,7 @@ module axi_ltc235x #(
         .adc_usr_datatype_bits (8'd32),
         .adc_usr_decimation_m (16'd1),
         .adc_usr_decimation_n (16'd1),
+        .up_usr_softspan (softspan_next_3[i]),
         .up_rstn (up_rstn),
         .up_clk (up_clk),
         .up_wreq (up_wreq_s),
@@ -415,7 +419,6 @@ module axi_ltc235x #(
     .up_usr_chanmax_in (8),
     .up_adc_gpio_in (32'b0),
     .up_adc_gpio_out (),
-    .softspan (softspan_next),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
