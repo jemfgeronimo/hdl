@@ -194,7 +194,6 @@ module axi_ltc235x #(
   wire    [ 7:0]          adc_enable;
   wire    [ 2:0]          adc_status_header[0:7];
 
-
   // defaults
 
   assign up_clk = s_axi_aclk;
