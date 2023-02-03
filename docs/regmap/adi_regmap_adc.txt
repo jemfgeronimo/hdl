@@ -589,19 +589,6 @@ RO
 If this bit is asserted there is no incomming 1PPS signal. Maybe the source is out of sync or it's not active.
 ENDFIELD
 
-REG
-0x0032
-REG_SOFTSPAN
-Softspan configuration register
-ENDREG
-
-FIELD
-[23:0] 0x00FFFFFF
-SOFTSPAN
-RO
-Softspan configuration register
-ENDFIELD
-
 ############################################################################################
 ############################################################################################
 
@@ -940,6 +927,29 @@ RW
 This holds the user decimation N value of the channel that is currently being selected on
 the multiplexer above. The total decimation factor is of the form M/N.
 NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x010A
+REG_CHAN_USR_CNTRL_3
+ADC Interface Control & Status
+ENDREG
+
+FIELD
+[31:3] 0x00000000
+RESERVED[28:0]
+RW
+Reserved for backward compatibility.
+ENDFIELD
+
+FIELD
+[2:0] 0x7
+SOFTSPAN [2:0]
+RW
+Softspan configuration register.
 ENDFIELD
 
 ############################################################################################
