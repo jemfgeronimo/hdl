@@ -113,14 +113,14 @@ module axi_ltc235x_cmos #(
   reg         [BW:0]  adc_data_init[7:0];
   reg         [BW:0]  adc_data_store[7:0];
 
-  reg         [ 2:0]  lane_0_ch = 'd0;
-  reg         [ 2:0]  lane_1_ch = 'd0;
-  reg         [ 2:0]  lane_2_ch = 'd0;
-  reg         [ 2:0]  lane_3_ch = 'd0;
-  reg         [ 2:0]  lane_4_ch = 'd0;
-  reg         [ 2:0]  lane_5_ch = 'd0;
-  reg         [ 2:0]  lane_6_ch = 'd0;
-  reg         [ 2:0]  lane_7_ch = 'd0;
+  reg         [ 2:0]  lane_0_ch = 3'd0;
+  reg         [ 2:0]  lane_1_ch = 3'd0;
+  reg         [ 2:0]  lane_2_ch = 3'd0;
+  reg         [ 2:0]  lane_3_ch = 3'd0;
+  reg         [ 2:0]  lane_4_ch = 3'd0;
+  reg         [ 2:0]  lane_5_ch = 3'd0;
+  reg         [ 2:0]  lane_6_ch = 3'd0;
+  reg         [ 2:0]  lane_7_ch = 3'd0;
 
   reg         [ 3:0]  adc_lane0_shift;
   reg         [ 3:0]  adc_lane1_shift;
@@ -143,14 +143,14 @@ module axi_ltc235x_cmos #(
   reg                 adc_valid_init;
   reg                 adc_valid_init_d;
 
-  reg         [ 7:0]  ch_data_lock = 'hff;
+  reg         [ 7:0]  ch_data_lock = 8'hff;
   reg         [ 7:0]  ch_capture;
   reg         [ 7:0]  ch_captured;
 
   reg                 scko_d;
   reg         [7:0]   db_i_d;
 
-  reg         [ 4:0]  db_o_index = 23;
+  reg         [ 4:0]  db_o_index = 5'd23;
 
   reg         [23:0]  softspan_next_int;
 
@@ -194,7 +194,7 @@ module axi_ltc235x_cmos #(
         scki_counter <= 5'h1;
         scki_i <= 1'b1;
       end else if (scki_i == 1'b0) begin
-        scki_counter <= scki_counter + 1;
+        scki_counter <= scki_counter + 5'd1;
         scki_i <= 1'b1;
       end else begin
         scki_counter <= scki_counter;
@@ -267,7 +267,7 @@ module axi_ltc235x_cmos #(
       adc_data_init[5] <= 'h0;
       adc_data_init[6] <= 'h0;
       adc_data_init[7] <= 'h0;
-      data_counter <= 'h0;
+      data_counter <= 5'h0;
     end else begin
       data_counter <= scki_counter;
       if (data_counter == DW) begin
@@ -297,14 +297,14 @@ module axi_ltc235x_cmos #(
       lane_7_ch <= 3'd7;
       ch_data_lock <= 8'd0;
     end else if (acquire_data == 1'b1 && (scki_cnt_rst & (~scki_d & scki_i))) begin
-      lane_0_ch <= lane_0_ch + 1;
-      lane_1_ch <= lane_1_ch + 1;
-      lane_2_ch <= lane_2_ch + 1;
-      lane_3_ch <= lane_3_ch + 1;
-      lane_4_ch <= lane_4_ch + 1;
-      lane_5_ch <= lane_5_ch + 1;
-      lane_6_ch <= lane_6_ch + 1;
-      lane_7_ch <= lane_7_ch + 1;
+      lane_0_ch <= lane_0_ch + 3'd1;
+      lane_1_ch <= lane_1_ch + 3'd1;
+      lane_2_ch <= lane_2_ch + 3'd1;
+      lane_3_ch <= lane_3_ch + 3'd1;
+      lane_4_ch <= lane_4_ch + 3'd1;
+      lane_5_ch <= lane_5_ch + 3'd1;
+      lane_6_ch <= lane_6_ch + 3'd1;
+      lane_7_ch <= lane_7_ch + 3'd1;
       ch_data_lock[lane_0_ch] <= ACTIVE_LANE[0] ? 1'b1 : ch_data_lock[lane_0_ch];
       ch_data_lock[lane_1_ch] <= ACTIVE_LANE[1] ? 1'b1 : ch_data_lock[lane_1_ch];
       ch_data_lock[lane_2_ch] <= ACTIVE_LANE[2] ? 1'b1 : ch_data_lock[lane_2_ch];
@@ -489,14 +489,14 @@ module axi_ltc235x_cmos #(
   // every negedge of scki, update index of db_o
   always @(posedge clk) begin
     if (start_transfer_s || rst) begin
-      db_o_index <= 'd23;
+      db_o_index <= 5'd23;
     end else begin
       if (scki && !scki_d && db_o_index != 5'b11111) begin
-        db_o_index <= db_o_index - 1'b1;
+        db_o_index <= db_o_index - 5'b1;
       end
     end
   end
 
-  assign db_o = (db_o_index != 5'b11111)? softspan_next_int[db_o_index] : 0;
+  assign db_o = (db_o_index != 5'b11111)? softspan_next_int[db_o_index] : 1'b0;
 
 endmodule
