@@ -39,7 +39,6 @@ ad_ip_parameter LANE_6_ENABLE INTEGER 1
 ad_ip_parameter LANE_7_ENABLE INTEGER 1
 ad_ip_parameter NUM_CHANNELS INTEGER 8
 ad_ip_parameter DATA_WIDTH INTEGER 18
-ad_ip_parameter SOFTSPAN_NEXT POSITIVE 0xffffff
 ad_ip_parameter EXTERNAL_CLK INTEGER 0
 
 adi_add_auto_fpga_spec_params
